@@ -1,7 +1,11 @@
 <nav class="navbar navbar-expand-lg fixed-top">
   <div class="container">
     <a href="{{ .Site.BaseURL }}" class="navbar-brand">
-      <img src="{{ .Site.Params.logo | absURL }}" alt="site-logo">
+      {{ if .Site.Params.logo_text }}
+        <span class="logo-text">{{ .Site.Params.logo_text }}</span>
+      {{ else if .Site.Params.logo }}
+        <img src="{{ .Site.Params.logo | absURL }}" alt="site-logo">
+      {{ end }}
     </a>
     <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#navbarCollapse">
       <span class="navbar-toggler-icon"></span>
@@ -20,7 +24,7 @@
         {{ end }}
       </ul>
       <div class="navbar-nav">
-        <a href="#contact" class="btn btn-primary btn-zoom scroll">Contact Me</a>
+        <a href="#contact" class="btn btn-primary btn-zoom scroll">Schedule a Consultation</a>
       </div>
     </div>
   </div>

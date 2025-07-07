@@ -39,7 +39,7 @@
         &_item {
             margin: 15px;
             padding: 30px;
-            box-shadow: 0px 20px 40px 0px rgba(50, 65, 141, 0.12);
+            box-shadow: 0px 20px 40px 0px $shadow-color;
             border-radius: 20px;
             background: $white;
             &-icon {

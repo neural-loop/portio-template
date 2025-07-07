@@ -1,8 +1,4 @@
-# Giulia D'Angelo's Personal Website
-
-This repository contains the source code and content for Dr. Giulia D'Angelo's personal academic and professional website. It is built with the [Hugo](https://gohugo.io/) static site generator.
-
-This guide is intended for Giulia and other contributors to help with running the site locally, making content updates, and getting development help.
+# Georgette Clay's Personal Website
 
 ## Table of Contents
 

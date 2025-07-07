@@ -1,6 +1,6 @@
 .contact__info {
   &_item {
-    box-shadow: 0px 20px 40px 0px rgba(50, 65, 141, 0.12);
+    box-shadow: 0px 20px 40px 0px $shadow-color;
     padding: 50px 40px;
     border-radius: 20px;
     &-icon {
@@ -31,14 +31,6 @@
   &-input {
     .form-group {
       margin-bottom: 30px;
-    }
-  }
-  #map {
-    border-radius: 30px;
-    height: 100%;
-    @include desktop {
-      height: 400px;
-      margin-top: 60px;
     }
   }
   &-generator {

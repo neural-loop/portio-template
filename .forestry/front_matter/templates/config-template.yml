@@ -88,21 +88,5 @@ fields:
     - type: text
       name: openingHours
       label: openingHours
-  - type: field_group
-    name: map
-    label: map
-    fields:
-    - type: text
-      name: APIkey
-      label: APIkey
-    - type: text
-      name: latitude
-      label: latitude
-    - type: text
-      name: longitude
-      label: longitude
-    - type: file
-      name: pinImage
-      label: pinImage
 pages:
 - config.toml

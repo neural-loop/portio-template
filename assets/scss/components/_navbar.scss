@@ -11,6 +11,22 @@
         border-radius: 5px;
     }
     .navbar-brand {
+        .logo-text {
+            font-family: $headings-font-family;
+            font-size: 28px;
+            font-weight: 400;
+            line-height: 1;
+            background: linear-gradient(45deg, $secondary, $primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+            display: inline-block;
+
+            @include desktop {
+                font-size: 24px;
+            }
+        }
         img {
             @include desktop {
                 width: 80%;
@@ -20,7 +36,7 @@
     &.nav__color__change {
         background: $white;
         padding: 20px 0;
-        box-shadow: 0px 10px 20px 0px rgba(50, 65, 141, 0.1);
+        box-shadow: 0px 10px 20px 0px $shadow-color;
         @include desktop {
             padding: 15px 20px;
         }

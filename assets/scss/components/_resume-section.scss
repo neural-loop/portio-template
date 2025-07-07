@@ -7,7 +7,7 @@
         padding: 100px 0;
     }
     &__background{
-        background: #1B2031;
+        background: #312c26;
         height: 100%;
         width: 100%;
         position: absolute;
@@ -48,7 +48,7 @@
             padding: 30px;
             border-radius: 20px;
             margin-bottom: 30px;
-            box-shadow: 0px 20px 40px 0px rgba(50, 65, 141, 0.12);
+            box-shadow: 0px 20px 40px 0px $shadow-color;
             span{
                 display: block;
                 margin: 0 0 20px 30px;

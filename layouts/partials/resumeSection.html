@@ -14,7 +14,6 @@
 
                     <div class="nav btn-group-vertical w-100 mt-5" role="tablist" aria-orientation="vertical">
                         <a href="#{{.tab1Target}}" class="btn btn-primary active" data-toggle="tab" role="tab">{{ .tab1Name }}</a>
-                        <a href="#{{.tab2Target}}" class="btn btn-primary" data-toggle="tab" role="tab">{{ .tab2Name }}</a>
                         <a href="#{{.tab3Target}}" class="btn btn-primary" data-toggle="tab" role="tab">{{ .tab3Name }}</a>
                     </div>
                 </div>
@@ -23,15 +22,6 @@
                 <div class="tab-content ">
                     <div class="resume__education tab-pane active" id="{{.tab1Target}}">
                         {{ range .experience }}
-                        <div class="resume__education_item">
-                            <span class="pre-line text-primary"> {{ .time }} </span>
-                            {{ .content | markdownify }}
-                        </div>
-                        {{ end }}
-                    </div>
-
-                    <div class="resume__education tab-pane" id="{{.tab2Target}}">
-                        {{ range .publications }}
                         <div class="resume__education_item">
                             <span class="pre-line text-primary"> {{ .time }} </span>
                             {{ .content | markdownify }}

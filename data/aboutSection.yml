@@ -1,20 +1,15 @@
 enable: true
 topTitle: About Me
 title: >
-  ## Hi. I'm **Giulia**, nice to meet you.
+  ## A Bridge Between People and Technology
 content: >
-  #### "The brain is imagination, and that was exciting to me; I wanted to build a chip that could imagine something." — *Misha Mahowald*
+  #### With over 15 years of experience in curriculum design, public speaking instruction, and program evaluation, I specialize in helping professionals articulate their ideas with confidence and clarity.
 
+  As a dedicated educator and academic leader, I have a proven ability to develop and implement innovative curricula that align with industry standards and promote engagement. My expertise lies in assessment methodologies, learning outcomes measurement, and faculty/student development.
 
-  I hold a Bachelor's in Biomedical Engineering and a Master's in **Neuroengineering** (with honors) from the **University of Genoa**, with a thesis on neuromorphic vision at **King's College London**.
-
-
-  After a year as a software engineer at the **Italian Institute of Technology**, I earned my PhD from **The University of Manchester**, receiving the **President's Doctoral Scholar Award**. My research focused on bio-inspired visual attention for the iCub humanoid robot using neuromorphic hardware.
-
-
-  Currently, I am a **Marie Skłodowska-Curie Postdoctoral Fellow** at the **Czech Technical University in Prague**, leading the ENDEAVOR project on event-driven active vision.
-button1Name: My Research
+  I hold a Doctorate in Education (Ed.S) with a focus on Adult Education and Curriculum Design, and I am a certified Neurolinguistic Practitioner. My passion is to act as a "translator," making complex concepts accessible and helping technical experts connect with their audience.
+button1Name: My Experience
 button2Name: Download CV
-button1Target: "#portfolio"
-button2Target: "cv.pdf"
-image: images/about/about-img.jpg
+button1Target: "#resume"
+button2Target: "Georgette_Clay_Resume.pdf"
+image: images/about/georgette-clay.jpg

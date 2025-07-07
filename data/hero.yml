@@ -1,10 +1,9 @@
 enable: true
-topTitle:   Enabling real-time robotic applications with microsecond latency and milliwatt power consumption.
-
+topTitle: "I empower introverts to give voice to vision."
 content: >
-  # Hello, I'm Giulia D'Angelo
+  # Hello, I'm Georgette Clay
 buttonName: Learn More
 buttonURL: "#about"
-image: images/hero/giulia-dangelo.jpg
+image: images/hero/georgette-clay.jpg
 videoThumb: images/hero/popup-thumb.png
-videoURL: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+videoURL: https://www.youtube.com/watch?v=dfmK9MRU4is
