@@ -1,6 +1,6 @@
 {{ with .Site.Data.blogSection }}
 {{ if .enable }}
-<section class="section blog-preview" id="blog">
+<section class="section blog-preview pb-4 mb-4" id="blog">
 	<div class="blog-preview__shape">
 		{{ partial "image.html" (dict "Src" "images/blog/blog-shape.svg" "Alt" "blog shape" "Context" .) }}
 	</div>
@@ -14,7 +14,7 @@
 			</div>
 			<div class="col-lg-6">
 				<div class="blog-preview__header_button desktop">
-					<a class="btn btn-outline-secondary  btn-zoom m-3" href="{{ .buttonTarget | absURL }}">See all posts</a>
+					<a class="btn btn-outline-secondary btn-zoom m-3" href="{{ .buttonTarget | absURL }}">See all posts</a>
 				</div>
 			</div>
 		</div>
@@ -22,22 +22,10 @@
 		<div class="row">
 			{{ $recentPosts := where $.Site.RegularPages "Type" "in" (slice "blog") }}
 			{{ range first 3 (sort $recentPosts "Date" "desc") }}
-			<div class="col-lg-4">
-                <a href="{{ .Permalink }}" class="blog-card-link">
-                    <div class="blog-preview__item">
-                        <div class="blog-preview__item-thumb">
-                            {{ partial "image.html" (dict "Src" .Params.featureImage "Alt" .Title "Context" . )}}
-                        </div>
-                        <div class="blog-preview__item-content bg-white">
-                            <span class="small">{{ .PublishDate.Format "January 2, 2006" }}</span>
-                            <div class="blog-card-title mb-0 text-dark">{{ .Title }}</div>
-                        </div>
-                    </div>
-                </a>
-			</div>
+			    {{ partial "components/blog-card.html" . }}
 			{{ end }}
-
 		</div>
+		
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="blog-preview__header_button mobile">

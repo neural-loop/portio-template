@@ -1,121 +1,86 @@
-.blog-page {
-	&__item {
-		position: relative;
-		margin-bottom: 180px;
-		&-thumb {
-			width: 90%;
-			height: 100%;
-			overflow: hidden;
-			border-radius: 20px;
-			@include desktop {
-				width: 80%;
-				margin: 0 auto;
-			}
-			img {
-				height: 100%;
-				width: 100%;
-				transition: all 0.3s ease;
-			}
-		}
-		&-content {
-			position: absolute;
-			bottom: -100px;
-			left: 40px;
-			padding: 30px;
-			border-radius: 20px;
-			box-shadow: 0px 20px 40px 0px $shadow-color;
-			@include desktop {
-				left: 0;
-			}
-			span {
-				color: $primary;
-				margin: 0 0 20px 40px;
-				position: relative;
-				display: block;
-				line-height: 1;
-				&::before {
-					position: absolute;
-					content: "";
-					top: 50%;
-					left: -40px;
-					height: 1px;
-					width: 20px;
-					background: $secondary;
-					transform: translateY(-50%);
-				}
-			}
-		}
-		&:hover {
-			.blog-page__item-thumb img {
-				transform: scale(1.1);
-			}
-		}
-	}
+// This file now defines the standard blog card component.
+.blog-card {
+    position: relative;
+    // Set a reasonable default margin for all cases (e.g., homepage).
+    margin-bottom: 30px; 
+
+    &__thumb {
+        width: 90%;
+        height: 100%;
+        overflow: hidden;
+        border-radius: 20px;
+        @include desktop {
+            width: 80%;
+            margin: 0 auto;
+        }
+        img {
+            height: 100%;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+    }
+    &__content {
+        position: absolute;
+        bottom: -100px;
+        left: 40px;
+        padding: 30px;
+        border-radius: 20px;
+        background: $white;
+        box-shadow: 0px 20px 40px 0px $shadow-color;
+        @include desktop {
+            left: 0;
+        }
+        span {
+            color: $body-color;
+            font-weight: 500;
+            margin: 0 0 20px 40px;
+            position: relative;
+            display: block;
+            line-height: 1;
+            &::before {
+                position: absolute;
+                content: "";
+                top: 50%;
+                left: -40px;
+                height: 1px;
+                width: 20px;
+                background: $secondary;
+                transform: translateY(-50%);
+            }
+        }
+        .blog-card-title {
+            font-family: $font-family-base;
+            font-size: $h5-font-size;
+            font-weight: 600;
+            line-height: 1.4;
+            transition: color 0.3s ease;
+        }
+    }
 }
 
-.blog-page {
-	&__item {
-		position: relative;
-		margin-bottom: 180px;
-		&-thumb {
-			width: 90%;
-			height: 100%;
-			overflow: hidden;
-			border-radius: 20px;
-			@include desktop {
-				width: 80%;
-				margin: 0 auto;
-			}
-			img {
-				height: 100%;
-				width: 100%;
-				transition: all 0.3s ease;
-			}
-		}
-		&-content {
-			position: absolute;
-			bottom: -100px;
-			left: 40px;
-			padding: 30px;
-			border-radius: 20px;
-			box-shadow: 0px 20px 40px 0px $shadow-color;
-			@include desktop {
-				left: 0;
-			}
-			span {
-				color: $primary;
-				margin: 0 0 20px 40px;
-				position: relative;
-				display: block;
-				line-height: 1;
-				&::before {
-					position: absolute;
-					content: "";
-					top: 50%;
-					left: -40px;
-					height: 1px;
-					width: 20px;
-					background: $secondary;
-					transform: translateY(-50%);
-				}
-			}
-            .blog-card-title {
-                font-family: $font-family-base;
-                font-size: $h5-font-size;
-                font-weight: 600;
-                line-height: 1.4;
-                a {
-                    transition: color 0.3s ease;
-                    &:hover {
-                        color: $primary !important;
-                    }
-                }
-            }
-		}
-		&:hover {
-			.blog-page__item-thumb img {
-				transform: scale(1.1);
-			}
-		}
-	}
+// Hover effects for the card link wrapper
+.blog-card-link {
+    display: block;
+    text-decoration: none;
+    transition: all 0.3s ease;
+
+    &:hover {
+        text-decoration: none;
+        .blog-card__thumb img {
+            transform: scale(1.1);
+        }
+        .blog-card__content .blog-card-title {
+            color: $primary !important;
+        }
+    }
+}
+
+// Styles for page-specific wrappers to accommodate overhanging content
+.blog-page,
+.blog-preview {
+    // This rule applies a larger margin-bottom to cards on the blog list page
+    // and the homepage preview, creating enough space for the overhanging content block.
+    .blog-card {
+        margin-bottom: 180px;
+    }
 }

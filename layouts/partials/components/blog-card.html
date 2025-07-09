@@ -1,0 +1,13 @@
+<div class="col-lg-4">
+    <a href="{{ .Permalink }}" class="blog-card-link">
+        <div class="blog-card">
+            <div class="blog-card__thumb">
+                {{ partial "image.html" (dict "Src" .Params.featureImage "Alt" .Title "Context" . )}}
+            </div>
+            <div class="blog-card__content bg-white">
+                <span class="small">{{ .PublishDate.Format "January 2, 2006" }}</span>
+                <div class="blog-card-title mb-0 text-dark">{{ .Title }}</div>
+            </div>
+        </div>
+    </a>
+</div>
