@@ -11,44 +11,23 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Smooth scrolling for anchor links with the .scroll class
-  const scrollLinks = document.querySelectorAll('.scroll');
-  scrollLinks.forEach(link => {
-    link.addEventListener('click', function (e) {
-      const targetId = this.getAttribute('href');
-      const targetElement = document.querySelector(targetId);
-      if (targetElement) {
-        e.preventDefault();
-        window.scrollTo({
-          top: targetElement.offsetTop,
-          behavior: 'smooth'
-        });
-        // Collapse mobile nav if open
-        const navbarCollapse = document.querySelector('.navbar-collapse');
-        const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
-        if (bsCollapse && navbarCollapse.classList.contains('show')) {
-          bsCollapse.hide();
-        }
-      }
-    });
-  });
+  // The custom smooth-scrolling JS has been removed to prevent conflicts with Bootstrap tabs.
+  // It is replaced by the `scroll-behavior: smooth;` rule in the main SCSS file.
 
   // Collapse mobile navbar after a link is clicked
-  const navLinks = document.querySelectorAll('.navbar-nav > li > a');
-  navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      const navbarCollapse = document.querySelector('.navbar-collapse');
-      const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
-      if (bsCollapse && navbarCollapse.classList.contains('show')) {
-        bsCollapse.hide();
-      }
+  const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+  const navbarCollapse = document.querySelector('.navbar-collapse');
+  
+  if (navbarCollapse) {
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        // Check if the navbar is actually collapsible and currently shown
+        if (navbarCollapse.classList.contains('show')) {
+           new bootstrap.Collapse(navbarCollapse).hide();
+        }
+      });
     });
-  });
-
-  // Mobile Navbar Toggle is now handled entirely by data-bs-* attributes in HTML.
-  // The custom JS implementation has been removed.
-
-  // Resume Tabs are now handled by Bootstrap's built-in JS via data-bs-toggle.
+  }
 
   // Waypoints and Testimonial Slider will be initialized via main.js after we install them via npm.
   // We'll leave the logic out of this file for now to keep it clean.
