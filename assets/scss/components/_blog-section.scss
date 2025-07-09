@@ -1,3 +1,18 @@
+// Add this new block for the link wrapper
+.blog-card-link {
+  display: block;
+  text-decoration: none;
+  transition: all 0.3s ease;
+
+  &:hover {
+    text-decoration: none;
+    // On card hover, change the title color to primary
+    .blog-preview__item-content h5 {
+      color: $primary !important;
+    }
+  }
+}
+
 .blog-preview {
 	position: relative;
 	margin-bottom: 150px;
@@ -63,7 +78,8 @@
 				left: 0;
 			}
 			span {
-				color: $primary;
+				color: $body-color;
+				font-weight: 500;
 				margin: 0 0 20px 40px;
 				position: relative;
 				display: block;
@@ -79,8 +95,12 @@
 					transform: translateY(-50%);
 				}
 			}
+      // Give the H5 a transition for the new hover effect
+      h5 {
+        transition: color 0.3s ease;
+      }
 		}
-		&:hover {
+		.blog-card-link:hover & { // target item from link hover
 			.blog-preview__item-thumb img {
 				transform: scale(1.1);
 			}

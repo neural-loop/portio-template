@@ -23,17 +23,17 @@
 			{{ $recentPosts := where $.Site.RegularPages "Type" "in" (slice "blog") }}
 			{{ range first 3 (sort $recentPosts "Date" "desc") }}
 			<div class="col-lg-4">
-				<div class="blog-preview__item">
-					<div class="blog-preview__item-thumb">
-						{{ partial "image.html" (dict "Src" .Params.featureImage "Alt" "post-image" "Context" . )}}
-					</div>
-					<div class="blog-preview__item-content bg-white">
-						<span class="small">{{ .PublishDate.Format "January 2, 2006" }}</span>
-						<h5 class="mb-0">
-							<a class="text-dark" href="{{ .Permalink }}">{{ .Title }}</a>
-						</h5>
-					</div>
-				</div>
+                <a href="{{ .Permalink }}" class="blog-card-link">
+                    <div class="blog-preview__item">
+                        <div class="blog-preview__item-thumb">
+                            {{ partial "image.html" (dict "Src" .Params.featureImage "Alt" .Title "Context" . )}}
+                        </div>
+                        <div class="blog-preview__item-content bg-white">
+                            <span class="small">{{ .PublishDate.Format "January 2, 2006" }}</span>
+                            <h5 class="mb-0 text-dark">{{ .Title }}</h5>
+                        </div>
+                    </div>
+                </a>
 			</div>
 			{{ end }}
 
