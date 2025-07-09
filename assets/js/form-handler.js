@@ -1,41 +1,45 @@
 window.addEventListener("DOMContentLoaded", function () {
-  var form = document.getElementById("contact-form");
-  var button = document.getElementById("contact-form-button");
-  var status = document.getElementById("contact-form-status");
+  const form = document.getElementById("contact-form");
+  const button = document.getElementById("contact-form-button");
+  const status = document.getElementById("contact-form-status");
+  const calContainer = document.getElementById('calendar-container');
 
-  function success() {
-    form.reset();
-    button.style = "display: none ";
-    status.innerHTML = "Thanks! Contact form is submitted successfully.";
+  if (!form || !button || !status || !calContainer) {
+    return;
   }
+  
+  async function handleSubmit(event) {
+    event.preventDefault();
+    const data = new FormData(event.target);
+    
+    try {
+      const response = await fetch(event.target.action, {
+        method: form.method,
+        body: data,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
 
-  function error() {
-    status.innerHTML = "Oops! There was a problem.";
-  }
-
-  // handle the form submission event
-  if (form != null) {
-    form.addEventListener("submit", function (ev) {
-      ev.preventDefault();
-      var data = new FormData(form);
-      ajax(form.method, form.action, data, success, error);
-    });
-  }
-});
-
-// helper function for sending an AJAX request
-
-function ajax(method, url, data, success, error) {
-  var xhr = new XMLHttpRequest();
-  xhr.open(method, url);
-  xhr.setRequestHeader("Accept", "application/json");
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState !== XMLHttpRequest.DONE) return;
-    if (xhr.status === 200) {
-      success(xhr.response, xhr.responseType);
-    } else {
-      error(xhr.status, xhr.response, xhr.responseType);
+      if (response.ok) {
+        status.innerHTML = "Thanks! Your message has been submitted.";
+        status.classList.add('text-success');
+        form.reset();
+        button.style.display = "none";
+      } else {
+        const responseData = await response.json();
+        if (Object.hasOwn(responseData, 'errors')) {
+          status.innerHTML = responseData["errors"].map(error => error["message"]).join(", ");
+        } else {
+          status.innerHTML = "Oops! There was a problem submitting your form.";
+        }
+        status.classList.add('text-danger');
+      }
+    } catch (error) {
+      status.innerHTML = "Oops! There was a network error.";
+      status.classList.add('text-danger');
     }
-  };
-  xhr.send(data);
-}
+  }
+
+  form.addEventListener("submit", handleSubmit);
+});

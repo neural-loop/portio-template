@@ -3,19 +3,27 @@ topTitle: Core Competencies
 title: >
   ## My Expertise
 service:
-  - content: >
+  - content: |
       #### Public Speaking & Presentation Coaching
+
       Crafting compelling narratives and delivering impactful presentations. Specialized coaching for technical experts and introverted professionals to overcome fear and connect with any audience.
-    image: images/service/creative.svg
-  - content: >
+    icon_style: "solid"
+    icon_name: "chalkboard-user"
+  - content: |
       #### Curriculum & Workshop Design
+
       Developing and implementing engaging, results-oriented training programs, courses, and workshops from the ground up, tailored to adult learners in technical fields.
-    image: images/service/web.svg
-  - content: >
+    icon_style: "solid"
+    icon_name: "file-pen"
+  - content: |
       #### Faculty & Team Training
+
       Facilitating professional development for educators and teams on topics like teacher evaluation frameworks (Danielson's), assessment standards (NYSLAT), and effective instructional strategies.
-    image: images/service/ui-ux.svg
-  - content: >
+    icon_style: "solid"
+    icon_name: "person-chalkboard"
+  - content: |
       #### Program Evaluation & Accreditation
+
       Collaborating with administrators for program review, analysis, and preparation for accreditation bodies like Middle States, ensuring alignment with academic and industry standards.
-    image: images/service/branding.svg
+    icon_style: "solid"
+    icon_name: "magnifying-glass-chart"

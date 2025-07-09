@@ -6,16 +6,15 @@ VERSION:	1.0.0
 -------------------------------------------------------------------*/
 @import "variables";
 
-// Import Bootstrap from node_modules
+// Import from node_modules
 @import "../../node_modules/bootstrap/scss/bootstrap";
+@import "../../node_modules/swiper/swiper-bundle.min.css";
 
 @import "typography";
-
 @import "mixins";
-
 @import "buttons";
-
 @import "common";
+@import "components/icons";
 
 @import "components/preloder";
 

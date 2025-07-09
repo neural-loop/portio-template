@@ -43,17 +43,41 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // Prevent page jump on resume tab change
-  let scrollPosition = 0;
-  const resumeTabs = document.querySelectorAll('.resume a[data-toggle="tab"]');
-  resumeTabs.forEach(tab => {
-    tab.addEventListener('show.bs.tab', () => {
-      scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+  // Mobile Navbar Toggle
+  const navbarToggler = document.querySelector('.navbar-toggler');
+  const navbarCollapse = document.querySelector('.navbar-collapse');
+
+  if (navbarToggler && navbarCollapse) {
+    navbarToggler.addEventListener('click', () => {
+      navbarCollapse.classList.toggle('show');
+      navbarToggler.classList.toggle('collapsed');
     });
-    tab.addEventListener('shown.bs.tab', () => {
-      window.scrollTo(0, scrollPosition);
+  }
+
+  // Resume Tabs with Vanilla JS
+  const tabContainer = document.querySelector('.resume .nav');
+  if (tabContainer) {
+    const tabButtons = tabContainer.querySelectorAll('a[data-toggle="tab"]');
+    const tabPanes = document.querySelectorAll('.resume .tab-pane');
+
+    tabButtons.forEach(button => {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        // Deactivate all buttons and panes
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabPanes.forEach(pane => pane.classList.remove('active'));
+
+        // Activate clicked button and corresponding pane
+        button.classList.add('active');
+        const targetPaneId = button.getAttribute('href');
+        const targetPane = document.querySelector(targetPaneId);
+        if(targetPane) {
+          targetPane.classList.add('active');
+        }
+      });
     });
-  });
+  }
 
   // Waypoints and Testimonial Slider will be initialized via main.js after we install them via npm.
   // We'll leave the logic out of this file for now to keep it clean.

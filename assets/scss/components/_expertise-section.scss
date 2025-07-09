@@ -40,21 +40,25 @@
         box-shadow: 0px 20px 40px 0px $shadow-color;
         border-radius: 20px;
         background: $white;
+        font-family: $font-family-base; // Set readable font for the whole card
+
         &-icon {
-            height: 110px;
-            width: 125px;
-            position: relative;
-            .icon-background {
-                position: absolute;
-                top: 0;
-                right: 0;
-            }
-            .icon {
-                position: absolute;
-                left: 0;
-                bottom: 0;
-                z-index: 1;
-            }
+            font-size: 65px;
+            color: $primary;
+            margin-bottom: 1.5rem;
+        }
+
+        // Style the heading inside the card
+        h4 {
+          font-weight: 600; // Keep it bold
+          color: $headings-color; // Use standard heading color
+        }
+
+        // Style the paragraph text inside the card
+        p {
+          font-size: 1rem; // 16px
+          line-height: 1.6;
+          color: $secondary; // Use a darker text color for better contrast
         }
     }
 }

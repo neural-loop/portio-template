@@ -2,7 +2,7 @@
 {{ if .enable }}
 <section class="section blog-preview" id="blog">
 	<div class="blog-preview__shape">
-		<img src="images/blog/blog-shape.svg" alt="blog shape" />
+		{{ partial "image.html" (dict "Src" "images/blog/blog-shape.svg" "Alt" "blog shape" "Context" .) }}
 	</div>
 	<div class="container">
 		<div class="row mb-5">
@@ -20,11 +20,12 @@
 		</div>
 
 		<div class="row">
-			{{ range first 3 (where $.Site.RegularPages "Type" "!=" "portfolio") }}
+			{{ $recentPosts := where $.Site.RegularPages "Type" "in" (slice "blog") }}
+			{{ range first 3 (sort $recentPosts "Date" "desc") }}
 			<div class="col-lg-4">
 				<div class="blog-preview__item">
 					<div class="blog-preview__item-thumb">
-						<img src="{{ .Params.featureImage | absURL }}" alt="post-image">
+						{{ partial "image.html" (dict "Src" .Params.featureImage "Alt" "post-image" "Context" . )}}
 					</div>
 					<div class="blog-preview__item-content bg-white">
 						<span class="small">{{ .PublishDate.Format "January 2, 2006" }}</span>

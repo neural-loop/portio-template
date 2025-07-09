@@ -3,6 +3,7 @@
 {{ partial "head.html" . }}
 
 <body>
+  {{ partial "components/svg-sprite.html" . }}
   {{ partial "navbar.html" . }}
   <div id="content">
     {{ block "main" . }}{{ end }}

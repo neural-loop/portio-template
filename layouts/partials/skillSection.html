@@ -25,14 +25,10 @@
                     <div class="skill__thumb_pattern">
                         <img src="images/hero/figure-svg.svg" alt="figure-svg">
                     </div>
-                    <div class="skill__thumb_image">
-                        <img src="{{ .image | absURL }}" alt="skill-img" style='
-                                        -webkit-mask: url({{"images/skill/skill-mask-svg.svg" | absURL}});
-                                        -webkit-mask-repeat: no-repeat;
-                                        -webkit-mask-size: contain;
-                                        -webkit-mask-position: center center;
-                                    '>
-                    </div>
+<div class="skill__thumb_image">
+{{ $maskImageResource := resources.Get "images/skill/skill-mask-svg.svg" }}
+<img src="{{ .image | absURL }}" alt="skill-img" class="mask-image-contain" style='-webkit-mask-image: url({{ $maskImageResource.RelPermalink }}); mask-image: url({{ $maskImageResource.RelPermalink }});' >
+</div>
                 </div>
             </div>
             <div class="col-lg-6">

@@ -6,16 +6,15 @@
   border-radius: 7px;
 }
 
-// Make primary buttons bold with white text for better contrast and readability.
-// Use !important to ensure these styles override Bootstrap's defaults.
 .btn-primary {
-  color: #fff !important;
-  font-weight: 600 !important;
+  // We remove the !important declarations. Bootstrap will handle this
+  // correctly if we set the variables properly in _variables.scss.
+  // The migration to BS5 will be much easier this way.
+  font-weight: 600;
   background-color: $primary;
   border-color: $primary;
 
   &:hover {
-    color: #fff !important;
     background-color: darken($primary, 7.5%);
     border-color: darken($primary, 10%);
   }

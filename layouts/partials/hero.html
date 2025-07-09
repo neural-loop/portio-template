@@ -36,32 +36,30 @@
         </div>
       </div>
       <div class="col-lg-6">
-        <div class="hero_figure">
-          <div class="figure-svg">
-            <img src="images/hero/figure-svg.svg" alt="figure-svg" />
-          </div>
-          <img src="{{ .image | absURL }}" alt="hero-image" style='
-                  -webkit-mask: url({{"images/hero/hero-mask-svg.png" | absURL }});
-                  -webkit-mask-repeat: no-repeat;
-                  -webkit-mask-size: contain;
-                  -webkit-mask-position: center center;
-                ' />
+<div class="hero_figure">
+  <div class="figure-svg">
+    {{ partial "image.html" (dict "Src" "images/hero/figure-svg.svg" "Context" .) }}
+  </div>
 
-          {{ if .videoURL }}
-          <div class="hero_figure-popup">
-            <div class="thumb">
-              <img src="{{ .videoThumb }}" alt="popup" />
-            </div>
+  {{ $maskImageResource := resources.Get "images/hero/hero-mask-svg.png" }}
+  <div class="mask-image-contain" style='-webkit-mask-image: url({{ $maskImageResource.RelPermalink }}); mask-image: url({{ $maskImageResource.RelPermalink }});'>
+    {{ partial "image.html" (dict "Src" .image "Alt" "hero-image" "Context" .) }}
+  </div>
 
-            <a href="{{ .videoURL }}" type="button" class="popup-button text-center big">
-              <svg xmlns="http://www.w3.org/2000/svg" width="21" height="24" viewBox="0 0 21 24">
-                <path d="M17.961 10.264a2 2 0 010 3.473L2.992 22.29A2 2 0 010 20.554V3.446A2 2 0 012.992 1.71z"
-                  data-name="Polygon 4" />
-              </svg>
-            </a>
-          </div>
-          {{ end }}
-        </div>
+  {{ if .videoURL }}
+  <div class="hero_figure-popup">
+    <div class="thumb">
+       {{ partial "image.html" (dict "Src" .videoThumb "Alt" "popup thumbnail" "Context" . )}}
+    </div>
+    <a href="{{ .videoURL }}" type="button" class="popup-button text-center big">
+      <svg xmlns="http://www.w3.org/2000/svg" width="21" height="24" viewBox="0 0 21 24">
+        <path d="M17.961 10.264a2 2 0 010 3.473L2.992 22.29A2 2 0 010 20.554V3.446A2 2 0 012.992 1.71z"
+          data-name="Polygon 4" />
+      </svg>
+    </a>
+  </div>
+  {{ end }}
+</div>
       </div>
     </div>
   </div>

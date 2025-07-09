@@ -1,6 +1,6 @@
 <head>
   <meta charset="utf-8" />
-  <title>{{ .Title }}</title>
+  <title>{{ if not .IsHome }}{{ .Title }} | {{ end }}{{ .Site.Title }}</title>
 
   <!-- mobile responsive meta -->
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -10,12 +10,6 @@
   {{ if .Site.Params.noindex }}
   <meta name="robots" content="noindex, nofollow">
   {{ end }}
-
-  <!-- Slick Carousel -->
-  <link rel="stylesheet" href="{{ "plugins/slick/slick.css" | absURL }}" />
-  <link rel="stylesheet" href="{{ "plugins/slick/slick-theme.css" | absURL }}" />
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="{{ "plugins/font-awesome/css/font-awesome.min.css" | absURL }}" />
 
   <!-- Stylesheets -->
   {{ $scss := resources.Get "scss/style.scss" }}
