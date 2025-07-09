@@ -12,15 +12,15 @@
                     </div>
                     <p class="text-light mt-4">{{ .subtitle }}</p>
 
-                    <div class="nav btn-group-vertical w-100 mt-5" role="tablist" aria-orientation="vertical">
-                        <a href="#{{.tab1Target}}" class="btn btn-primary active" data-toggle="tab" role="tab">{{ .tab1Name }}</a>
-                        <a href="#{{.tab3Target}}" class="btn btn-primary" data-toggle="tab" role="tab">{{ .tab3Name }}</a>
+                    <div class="nav nav-pills flex-column w-100 mt-5" id="resume-tabs" role="tablist" aria-orientation="vertical">
+                        <a href="#{{.tab1Target}}" class="nav-link active" id="tab-{{.tab1Target}}" data-bs-toggle="pill" role="tab" aria-controls="{{.tab1Target}}" aria-selected="true">{{ .tab1Name }}</a>
+                        <a href="#{{.tab3Target}}" class="nav-link" id="tab-{{.tab3Target}}" data-bs-toggle="pill" role="tab" aria-controls="{{.tab3Target}}" aria-selected="false">{{ .tab3Name }}</a>
                     </div>
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="tab-content ">
-                    <div class="resume__education tab-pane active" id="{{.tab1Target}}">
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="{{.tab1Target}}" role="tabpanel" aria-labelledby="tab-{{.tab1Target}}">
                         {{ range .experience }}
                         <div class="resume__education_item">
                             <span class="pre-line text-primary"> {{ .time }} </span>
@@ -29,7 +29,7 @@
                         {{ end }}
                     </div>
 
-                    <div class="resume__education tab-pane" id="{{.tab3Target}}">
+                    <div class="tab-pane fade" id="{{.tab3Target}}" role="tabpanel" aria-labelledby="tab-{{.tab3Target}}">
                         {{ range .education }}
                         <div class="resume__education_item">
                             <span class="pre-line text-primary"> {{ .time }} </span>

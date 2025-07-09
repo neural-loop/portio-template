@@ -25,8 +25,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         // Collapse mobile nav if open
         const navbarCollapse = document.querySelector('.navbar-collapse');
-        if (navbarCollapse && navbarCollapse.classList.contains('show')) {
-          navbarCollapse.classList.remove('show');
+        const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+        if (bsCollapse && navbarCollapse.classList.contains('show')) {
+          bsCollapse.hide();
         }
       }
     });
@@ -37,25 +38,17 @@ document.addEventListener('DOMContentLoaded', function () {
   navLinks.forEach(link => {
     link.addEventListener('click', () => {
       const navbarCollapse = document.querySelector('.navbar-collapse');
-      if (navbarCollapse && navbarCollapse.classList.contains('show')) {
-        navbarCollapse.classList.remove('show');
+      const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+      if (bsCollapse && navbarCollapse.classList.contains('show')) {
+        bsCollapse.hide();
       }
     });
   });
 
-  // Mobile Navbar Toggle
-  const navbarToggler = document.querySelector('.navbar-toggler');
-  const navbarCollapse = document.querySelector('.navbar-collapse');
+  // Mobile Navbar Toggle is now handled entirely by data-bs-* attributes in HTML.
+  // The custom JS implementation has been removed.
 
-  if (navbarToggler && navbarCollapse) {
-    navbarToggler.addEventListener('click', () => {
-      navbarCollapse.classList.toggle('show');
-      navbarToggler.classList.toggle('collapsed');
-    });
-  }
-
-  // Resume Tabs are now handled by Bootstrap's built-in JS.
-  // The custom vanilla JS implementation has been removed.
+  // Resume Tabs are now handled by Bootstrap's built-in JS via data-bs-toggle.
 
   // Waypoints and Testimonial Slider will be initialized via main.js after we install them via npm.
   // We'll leave the logic out of this file for now to keep it clean.

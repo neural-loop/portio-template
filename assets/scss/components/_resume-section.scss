@@ -29,15 +29,22 @@
                 background: $light;
             }
         }
-        .btn-group-vertical {
-            .btn {
+        .nav-pills {
+            .nav-link {
                 text-align: left;
                 padding: 1rem 1.25rem;
                 background-color: darken($primary, 10%);
-                border-color: darken($primary, 12%);
+                color: $white;
+                border-radius: .25rem;
+                margin-bottom: 2px; // to create the separation
+
                 &.active {
                     background-color: $primary;
-                    border-color: $primary;
+                    color: $white;
+                }
+
+                &:not(.active):hover {
+                    background-color: darken($primary, 5%);
                 }
             }
         }

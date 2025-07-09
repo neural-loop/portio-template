@@ -39,4 +39,5 @@ $line-height-base: 1.75;
 $link-hover-decoration: none;
 
 // ADD THIS NEW VARIABLE FOR BUTTONS
-$btn-primary-color: #fff;
+// No longer needed for Bootstrap 5, it handles button text color better.
+// $btn-primary-color: #fff;
