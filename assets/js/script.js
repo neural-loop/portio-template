@@ -54,30 +54,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Resume Tabs with Vanilla JS
-  const tabContainer = document.querySelector('.resume .nav');
-  if (tabContainer) {
-    const tabButtons = tabContainer.querySelectorAll('a[data-toggle="tab"]');
-    const tabPanes = document.querySelectorAll('.resume .tab-pane');
-
-    tabButtons.forEach(button => {
-      button.addEventListener('click', (e) => {
-        e.preventDefault();
-
-        // Deactivate all buttons and panes
-        tabButtons.forEach(btn => btn.classList.remove('active'));
-        tabPanes.forEach(pane => pane.classList.remove('active'));
-
-        // Activate clicked button and corresponding pane
-        button.classList.add('active');
-        const targetPaneId = button.getAttribute('href');
-        const targetPane = document.querySelector(targetPaneId);
-        if(targetPane) {
-          targetPane.classList.add('active');
-        }
-      });
-    });
-  }
+  // Resume Tabs are now handled by Bootstrap's built-in JS.
+  // The custom vanilla JS implementation has been removed.
 
   // Waypoints and Testimonial Slider will be initialized via main.js after we install them via npm.
   // We'll leave the logic out of this file for now to keep it clean.

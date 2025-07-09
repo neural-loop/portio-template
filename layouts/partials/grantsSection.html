@@ -1,10 +1,10 @@
 {{ with .Site.Data.grantsSection }}
 {{ if .enable }}
-<section class="section portfolio" id="awards">
+<section class="section awards" id="awards">
   <div class="container">
     <div class="row text-center">
       <div class="col-lg-6 offset-lg-3">
-        <div class="portfolio__header mb-5">
+        <div class="awards__header mb-5">
           <span class="top-title">{{ .topTitle }}</span>
           {{ .title | markdownify }}
         </div>
@@ -12,13 +12,13 @@
     </div>
     <div class="row">
       <div class="col-12">
-        <div class="portfolio-item-grid">
+        <div class="awards-item-grid">
           {{ range .awards }}
-          <div class="portfolio-item">
+          <div class="awards-item">
             <a {{ if .url }}href="{{ .url | absURL }}" target="_blank"{{ end }}>
-              <img src="{{ .image | absURL }}" class="portfolio-item-thumb" alt="{{ .title }}" />
+              <img src="{{ .image | absURL }}" class="awards-item-thumb" alt="{{ .title }}" />
             </a>
-            <div class="portfolio-item-content">
+            <div class="awards-item-content">
               <span>{{ .category }}</span>
               <h3 class="mb-0">
                 <a class="text-dark" {{ if .url }}href="{{ .url | absURL }}" target="_blank"{{ end }}>{{ .title }}</a>
