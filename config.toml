@@ -1,4 +1,4 @@
-baseURL = "http://example.org/"
+baseURL = "https://clay.visioninit.dev/"
 languageCode = "en-us"
 title = "Georgette Clay MA, Ed.S | Public Speaking & Curriculum Design"
 
@@ -43,7 +43,7 @@ copyright = "Copyright © Georgette Clay 2024"
 # We're using fabform.io for form handling, paste your fabform url below
 fabformURL  = "YOUR_FABFORM_URL_HERE"
 # Add the new scheduling link parameter here
-scheduling_link = "YOUR_CAL_COM_LINK_HERE"
+scheduling_link = "https://cal.com/visioninit/temp./"
 googleAnalytics = "YOUR_GOOGLE_ANALYTICS_CODE"
 logo_text = "Georgette Clay"
 

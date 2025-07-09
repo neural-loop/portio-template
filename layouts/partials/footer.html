@@ -1,9 +1,5 @@
 <section class="footer" id="contact">
-	<div class="footer__background_shape">
-		<svg viewBox="0 0 1920 79">
-			<path d="M0 0h1920v79L0 0z" data-name="Path 1450" />
-		</svg>
-	</div>
+	<div class="footer__background"></div>
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12">
@@ -88,21 +84,17 @@
 	</div>
 </section>
 
-<!-- Old Scripts -->
+<!-- JS Plugins -->
 <script src="{{ "plugins/jQuery/jquery.min.js" | absURL }}"></script>
 <script src="{{ "plugins/bootstrap/bootstrap.min.js" | absURL }}"></script>
 <script src="{{ "plugins/slick/slick.min.js" | absURL }}"></script>
 <script src="{{ "plugins/waypoint/jquery.waypoints.min.js" | absURL }}"></script>
-<script src="{{ "plugins/magnafic-popup/jquery.magnific-popup.min.js" | absURL }}"></script>
-<script src="{{ "plugins/tweenmax/TweenMax.min.js" | absURL }}"></script>
-<script src="{{ "plugins/imagesloaded/imagesloaded.min.js" | absURL }}"></script>
-<script src="{{ "plugins/masonry/masonry.min.js" | absURL }}"></script>
 
-<!-- Keep existing script.js for other site functionality -->
+<!-- Main Script -->
 {{ $script := resources.Get "js/script.js" | minify }}
 <script src="{{ $script.Permalink }}"></script>
 
-<!-- Original Form Handler (still needed for form submission logic) -->
+<!-- Form Handler -->
 {{ $formHandler := resources.Get "js/form-handler.js" | minify }}
 <script src="{{ $formHandler.Permalink }}"></script>
 

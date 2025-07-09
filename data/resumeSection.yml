@@ -10,7 +10,7 @@ tab1Target: "experience"
 tab3Target: "education"
 
 experience:
-  - content: >
+  - content: |
       #### Faculty Facilitator, Master of Science TOESOL certification
       *Boricua College, Brooklyn, NY*
       
@@ -20,7 +20,7 @@ experience:
       - Participated in IRB review and assisted with Middle States accreditation.
       - Facilitated 16 credits of coursework on teaching concepts in K-12 schools.
     time: 2024 - PRESENT
-  - content: >
+  - content: |
       #### Adjunct Lecturer, Speech Communications
       *Borough Of Manhattan Community College, Manhattan, NY*
       
@@ -28,35 +28,35 @@ experience:
       - Instructed and evaluated student speeches, coaching interpersonal and public speaking skills.
       - Judged Regional CUNY-speech competitions.
     time: 2017 - PRESENT
-  - content: >
+  - content: |
       #### Adjunct Lecturer
       *Mercy College, The Bronx, NY*
       
       - Collaborated with faculty to create curriculum for Public Speaking, Critical Inquiry, and FYS courses.
       - Instructed students in APA citation standards, academic research, & writing.
     time: 2014 - PRESENT
-  - content: >
+  - content: |
       #### Adjunct Lecturer, Mass Communications/Linguistics
       *Iona University, New Rochelle, NY*
       
       - Designed lesson plans and curriculum for public speaking and clinical linguistics.
       - Developed and implemented phonology research and dialectical analysis.
     time: 2014 - 2017
-  - content: >
+  - content: |
       #### Adjunct Lecturer
       *Laboratory Institute Of Merchandising (LIM), New York, NY*
       
       - Taught Public Speaking in the Fashion Industry context.
       - Collaborated with leadership on curriculum development and instruction improvement.
     time: 2014 - 2016
-  - content: >
+  - content: |
       #### Online Instructor/Facilitator
       *University Of Phoenix, Online*
       
       - Facilitated asynchronous courses, helping students with engaging, learning-focused activities.
       - Developed and implemented classroom routines to address varying student needs.
     time: 2009 - 2013
-  - content: >
+  - content: |
       #### Adjunct Instructor; Ethics/Portfolio Foundations
       *Art Institute Of San Francisco, San Francisco, CA*
       
@@ -65,15 +65,15 @@ experience:
     time: 2010 - 2012
 
 education:
-  - content: >
+  - content: |
       #### Ed.S, Higher Education Administration Specialist
       *Walden University / University of North Dakota*
     time: 2018
-  - content: >
+  - content: |
       #### Master of Arts, Communications
       *University of North Dakota*
     time: 2002
-  - content: >
+  - content: |
       #### Bachelor of Arts, Communications
       *University of North Dakota*
     time: 1998
