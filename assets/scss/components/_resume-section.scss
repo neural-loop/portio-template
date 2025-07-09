@@ -30,24 +30,10 @@
                 background: $light;
             }
         }
-        .nav-pills {
-            .nav-link {
-                text-align: left;
-                padding: 1rem 1.25rem;
-                background-color: darken($primary, 10%);
-                color: $white;
-                border-radius: .25rem;
-                margin-bottom: 2px; // to create the separation
-
-                &.active {
-                    background-color: $primary;
-                    color: $white;
-                }
-
-                &:not(.active):hover {
-                    background-color: darken($primary, 5%);
-                }
-            }
+        // Styling for the new anchor buttons
+        .btn {
+            padding: 1rem 1.25rem;
+            font-weight: 600;
         }
     }
     &__education{
