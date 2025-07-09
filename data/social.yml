@@ -1,0 +1,8 @@
+- name: LinkedIn
+  icon_style: "brands"
+  icon_name: "linkedin"
+  url: "https://www.linkedin.com/in/georgette-clay-ma-ed-s-4361a329/"
+- name: Email
+  icon_style: "solid"
+  icon_name: "envelope"
+  url: "mailto:georgette_clay@yahoo.com"

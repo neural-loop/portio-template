@@ -1,0 +1,33 @@
+// Styling for SVG icons used via the sprite system
+.icon {
+  display: inline-block; // Ensures proper alignment and sizing
+  width: 1em;           // Default width, scales with font-size
+  height: 1em;          // Default height, scales with font-size
+  fill: currentColor;   // Inherit color from parent by default
+  vertical-align: -0.125em; // Align icon slightly lower to match text baseline better
+  margin-right: 0.25em; // Add a small space between the icon and the text that follows it
+}
+
+// Remove the right margin for icons that are the very last element in a button or link
+.btn .icon:last-child,
+a .icon:last-child {
+  margin-right: 0;
+}
+
+// Add left margin if icon is placed after text
+.icon.ms-2 { // Example using bootstrap spacing class name
+  margin-left: 0.5rem;
+}
+
+
+// Specific styling for testimonial rating stars
+.testimonial__slider_item-rating {
+  .icon {
+    color: #ffc219; // Active star color
+    margin-right: 0.1em; // Tighter spacing for stars
+
+    &.inactive {
+      color: #c2c8cc; // Inactive star color
+    }
+  }
+}

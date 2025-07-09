@@ -1,0 +1,15 @@
+{{ $style := .style | default "solid" }}
+{{ $name := .name }}
+{{ $customClass := .class }}
+{{ $ariaHidden := .aria_hidden | default true }}
+{{ $label := .label }}
+
+{{ if $name }}
+  <svg class="icon icon-{{ $style }}-{{ $name }}{{ with $customClass }} {{ . }}{{ end }}"
+       role="img"
+       {{ if $label }}aria-label="{{ $label }}"{{ else if $ariaHidden }}aria-hidden="true"{{ end }}>
+    <use xlink:href="#icon-{{ $style }}-{{ $name }}"></use>
+  </svg>
+{{ else }}
+  {{ warnf "[Icon Partial] Icon name not provided." }}
+{{ end }}

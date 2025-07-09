@@ -1,0 +1,26 @@
+# List of Font Awesome SVG icons used on the site.
+# This will be used to generate an SVG sprite.
+#
+# Structure for each icon:
+# - style: solid | regular | brands
+#   name: icon-name (without the 'fa-' prefix)
+
+fontawesome_svgs:
+  - style: brands
+    name: linkedin
+  - style: solid
+    name: envelope
+  - style: solid
+    name: paper-plane
+  - style: solid
+    name: calendar-check
+  - style: solid
+    name: star
+  - style: solid
+    name: chalkboard-user
+  - style: solid
+    name: file-pen
+  - style: solid
+    name: person-chalkboard
+  - style: solid
+    name: magnifying-glass-chart

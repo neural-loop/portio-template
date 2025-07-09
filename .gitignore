@@ -1,3 +1,5 @@
 .DS_Store
 /tmp/output_full.txt
 /public/
+/node_modules/
+/resources/
