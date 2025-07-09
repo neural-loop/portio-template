@@ -127,3 +127,105 @@
 		-webkit-transform: rotate(360deg);
 	}
 }
+
+// Add this new block for the link wrapper
+.blog-card-link {
+  display: block;
+  text-decoration: none;
+  transition: all 0.3s ease;
+
+  &:hover {
+    text-decoration: none;
+    // On card hover, change the title color to primary
+    .blog-preview__item-content .blog-card-title {
+      color: $primary !important;
+    }
+  }
+}
+
+.blog-preview {
+	position: relative;
+	margin-bottom: 150px;
+	&__shape {
+		position: absolute;
+		top: 11%;
+		right: 12%;
+		height: 300px;
+		width: 300px;
+		img {
+			animation: rotate 25s infinite linear;
+			height: 100%;
+			width: 100%;
+			@include desktop {
+				width: 80%;
+				margin: 0 auto;
+			}
+			img {
+				height: 100%;
+				width: 100%;
+				transition: all 0.3s ease;
+			}
+		}
+		&-content {
+			position: absolute;
+			bottom: -100px;
+			left: 40px;
+			padding: 30px;
+			border-radius: 20px;
+			box-shadow: 0px 20px 40px 0px $shadow-color;
+			@include desktop {
+				left: 0;
+			}
+			span {
+				color: $body-color;
+				font-weight: 500;
+				margin: 0 0 20px 40px;
+				position: relative;
+				display: block;
+				line-height: 1;
+				&::before {
+					position: absolute;
+					content: "";
+					top: 50%;
+					left: -40px;
+					height: 1px;
+					width: 20px;
+					background: $secondary;
+					transform: translateY(-50%);
+				}
+			}
+            .blog-card-title {
+                font-family: $font-family-base;
+                font-size: $h5-font-size;
+                font-weight: 600;
+                line-height: 1.4;
+                transition: color 0.3s ease;
+            }
+		}
+		.blog-card-link:hover & {
+			.blog-preview__item-thumb img {
+				transform: scale(1.1);
+			}
+		}
+	}
+	.mobile {
+		display: none;
+	}
+	@include desktop {
+		.desktop {
+			display: none;
+		}
+		.mobile {
+			display: block;
+			text-align: center;
+		}
+	}
+}
+@keyframes rotate {
+	from {
+		-webkit-transform: rotate(0deg);
+	}
+	to {
+		-webkit-transform: rotate(360deg);
+	}
+}
