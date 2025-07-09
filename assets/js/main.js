@@ -1,9 +1,20 @@
-// assets/js/main.js
-'use strict';
+// Import Bootstrap's JS
+import 'bootstrap';
 
-// Import the new module-based scripts
+// Import Slick Carousel if you choose to keep it (see next section)
+// import 'slick-carousel';
+
+// Import Waypoints if needed for animations (see next section)
+// import 'waypoints/lib/jquery.waypoints.js'; // Note: some plugins might still need jQuery
+
+// Import our custom scripts
+import './script.js';
+import './form-handler.js';
 import './contact-calendar-toggle.js';
 
-// The old scripts from script.js and form-handler.js will be managed separately for now
-// or can be integrated here later if needed. This keeps the new functionality self-contained.
-console.log("Main JS bundle for Portio theme loaded.");
+// Re-initialize sliders or other plugins after webpack bundling
+document.addEventListener('DOMContentLoaded', () => {
+    // Testimonial slider initialization (if using Slick)
+    // $('.testimonial__slider').slick({ ... });
+    console.log("Modern JS bundle loaded.");
+});
