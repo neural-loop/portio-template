@@ -46,9 +46,9 @@ form_action_url = "YOUR_FABFORM_URL_HERE"
 scheduling_link = "https://cal.com/visioninit/temp./"
 googleAnalytics = "YOUR_GOOGLE_ANALYTICS_CODE"
 logo_text = "Georgette Clay"
+description = "Georgette Clay, an experienced educator and public speaking coach, specializes in curriculum design, program evaluation, and empowering professionals to communicate with clarity and confidence."
 
 [params.address]
 address = "New York, NY 10016"
 email = "georgette_clay@yahoo.com"
 phone = "347-977-1532"
-

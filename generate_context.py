@@ -14,29 +14,22 @@ PROJECT_ROOT = Path(".").resolve()  # Get absolute path of current dir
 # Output files (relative to PROJECT_ROOT, placed in tmp/)
 TMP_DIR = PROJECT_ROOT / "tmp"
 FULL_OUTPUT_FILE = TMP_DIR / "output_full.txt"
-DIFF_OUTPUT_FILE = TMP_DIR / "output_diff.txt"
 LAYOUTS_OUTPUT_FILE = TMP_DIR / "output_layouts.txt"
 
-# Directories containing third-party/vendored libraries.
-# Files within these dirs will be listed by path but their content won't be included.
-PACKAGED_LIB_DIRS = [
-    "assets/bootstrap-4.5.2",
-    "static/plugins",
-]
-
-# Files/Directories to EXCLUDE from all processing
-# 'public' is excluded from the general scan, but HTMLs can be added back specifically
+# Files/Directories to EXCLUDE (relative to PROJECT_ROOT)
+# 'public' is excluded here for the general scan, but HTMLs can be added back specifically
 EXCLUDED_DIRS = [
     ".git",
     "node_modules",
     "tmp",
-    # Images are now handled by the IMAGE_EXTENSIONS check,
-    # but you can still exclude large top-level image directories if needed.
-    # e.g., "exampleSite/static/images",
+    "assets/images", # Standard image asset directory, often large
+    "assets/source-assets",
+    "static/images", # Another common place for images
+    "static/assets", # General static assets
     ".idea",
     ".vscode",
     "public", # Excluded from general scan; HTMLs added specifically if flag is set
-    "resources", # Hugo's generated resource cache
+    "resources",
     "__pycache__",
     ".venv",
     "venv",
@@ -48,22 +41,16 @@ EXCLUDED_FILES_PATTERNS = [
     "hugo_stats.json",
     ".hugo_build.lock",
     str(FULL_OUTPUT_FILE.name),
-    str(DIFF_OUTPUT_FILE.name),
     str(LAYOUTS_OUTPUT_FILE.name),
     "*.pyc",
     "*~", # Backup files
     "package-lock.json",
-    # Exclude minified and map files to reduce noise
-    "*.min.js",
-    "*.min.css",
-    "*.js.map",
-    "*.css.map",
 ]
 
 # Common image file extensions
 IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg", ".ico"}
 
-# File patterns/names to INCLUDE (if not excluded above)
+# File patterns/names to INCLUDE
 INCLUDE_PATTERNS = [
     "*.html",
     "*.md",
@@ -73,7 +60,7 @@ INCLUDE_PATTERNS = [
     "*.yml",
     "*.scss",
     "*.js",
-    "*.py",
+    "*.php",
     "*.sh",
     ".gitignore",
     "Dockerfile",
@@ -83,7 +70,7 @@ INCLUDE_PATTERNS = [
     "go.sum",
     "package.json",
     "nginx.conf",
-    # Add image patterns explicitly so they can be identified
+    # Add image patterns explicitly
     "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp", "*.svg", "*.ico",
 ]
 # --- End Configuration ---
@@ -94,38 +81,24 @@ def log(message):
 
 def should_ignore(path: Path, root: Path) -> bool:
     """Checks if a given path should be ignored based on config."""
-    # Check against excluded directories
-    try:
-        relative_path = path.relative_to(root)
-        # Check if the path or any of its parents match an excluded directory
-        for part in relative_path.parts:
-            # Reconstruct path parts to check against top-level exclusions
-            if part in EXCLUDED_DIRS:
-                 # This check is basic; for `foo/bar` vs `bar`, it might misfire.
-                 # A more robust check compares full initial path segments.
-                 pass
-        # A better check for top-level directories
-        if any(relative_path.is_relative_to(ex_dir) for ex_dir in EXCLUDED_DIRS):
+    relative_path_str = str(path.relative_to(root))
+    parts = path.relative_to(root).parts
+    for excluded_dir in EXCLUDED_DIRS:
+        norm_excluded = excluded_dir.replace('/', os.sep)
+        # Check if any part of the path matches an excluded directory
+        # or if the relative path starts with an excluded directory
+        current_check_path = Path()
+        for part in parts[:-1]: # Iterate through parent directories of the file/dir
+            current_check_path = current_check_path / part
+            if str(current_check_path) == norm_excluded:
+                return True
+        if path.is_dir() and str(path.relative_to(root)) == norm_excluded: # If path itself is an excluded dir
             return True
-    except ValueError: # pragma: no cover
-        # This can happen if path is not within root, e.g. a symlink pointing outside
-        pass
 
-    # Check against excluded file patterns
+
     for pattern in EXCLUDED_FILES_PATTERNS:
         if fnmatch.fnmatch(path.name, pattern):
             return True
-    return False
-
-def is_packaged_library_file(path: Path, root: Path) -> bool:
-    """Checks if a file is part of a packaged library directory."""
-    try:
-        relative_path_str = str(path.relative_to(root).as_posix())
-        for lib_dir in PACKAGED_LIB_DIRS:
-            if relative_path_str.startswith(lib_dir):
-                return True
-    except ValueError:
-        pass
     return False
 
 def should_include(filename: str) -> bool:
@@ -135,25 +108,21 @@ def should_include(filename: str) -> bool:
             return True
     return False
 
-def find_relevant_files(root: Path, checkpoint_mtime: float | None = None, mode: str = "full", with_public_html: bool = False) -> list[Path]:
+def find_relevant_files(root: Path, mode: str = "full", with_public_html: bool = False) -> list[Path]:
     """
     Walks the directory tree, applying include/exclude rules.
-    If checkpoint_mtime is provided, only includes files newer than it.
     If mode is "layouts", filters for files within "layouts" directories.
     If with_public_html is True and mode is "full", also includes HTML files from ./public.
     """
     initial_candidates = set() # Use a set to handle potential overlaps gracefully
 
     log(f"Scanning directory: {root} for mode '{mode}' (main scan)")
-    if checkpoint_mtime:
-        log(f"Filtering for files newer than: {datetime.fromtimestamp(checkpoint_mtime)}")
 
     for current_dir_str, dir_names, file_names in os.walk(root, topdown=True):
         current_path = Path(current_dir_str)
 
-        # Pruning: Modify dir_names IN-PLACE to avoid descending into excluded directories.
-        dir_names[:] = [d for d in dir_names if not any( (current_path/d).is_relative_to(root/ex_dir) for ex_dir in EXCLUDED_DIRS )]
-
+        # Pruning: Modify dir_names IN-PLACE. This will skip 'public' for the main scan.
+        dir_names[:] = [d_name for d_name in dir_names if not should_ignore(current_path / d_name, root)]
 
         for filename in file_names:
             file_path = current_path / filename
@@ -164,13 +133,6 @@ def find_relevant_files(root: Path, checkpoint_mtime: float | None = None, mode:
             if not should_include(filename):
                 continue
 
-            if checkpoint_mtime:
-                try:
-                    if file_path.stat().st_mtime <= checkpoint_mtime:
-                        continue
-                except OSError as e:
-                    log(f"Warning: Could not stat file {file_path}: {e}. Skipping.")
-                    continue
             initial_candidates.add(file_path.resolve()) # Store absolute paths
 
     log(f"Found {len(initial_candidates)} candidate files from main scan.")
@@ -182,17 +144,8 @@ def find_relevant_files(root: Path, checkpoint_mtime: float | None = None, mode:
         public_html_added_count = 0
         if public_dir.is_dir():
             for item in public_dir.rglob('*.html'): # rglob for recursive search
-                if item.is_file() and not should_ignore(item, root):
+                if item.is_file():
                     public_file_path = item.resolve() # Ensure absolute path
-                    # Apply mtime filter for public HTML files too, if diff mode were to use this
-                    if checkpoint_mtime:
-                        try:
-                            if public_file_path.stat().st_mtime <= checkpoint_mtime:
-                                continue
-                        except OSError as e:
-                            log(f"Warning: Could not stat file {public_file_path}: {e}. Skipping.")
-                            continue
-
                     if public_file_path not in initial_candidates: # Add if not already picked up
                         initial_candidates.add(public_file_path)
                         public_html_added_count +=1
@@ -220,43 +173,50 @@ def find_relevant_files(root: Path, checkpoint_mtime: float | None = None, mode:
     return final_relevant_files_list
 
 
-def generate_header(mode: str, checkpoint_file: Path | None = None, with_public_html: bool = False) -> str:
+### --- NEW --- ###
+def list_static_files(root: Path) -> list[Path]:
+    """
+    Generates a complete list of all files within the 'static' directory.
+    This function ignores the main include/exclude rules to provide a full manifest.
+    """
+    log("Listing all files in 'static' directory for manifest.")
+    static_dir = root / "static"
+    file_list = []
+
+    if not static_dir.is_dir():
+        log("Warning: 'static' directory not found, skipping static file listing.")
+        return file_list
+
+    for item in static_dir.rglob('*'):
+        # We only want to list files, and we'll ignore common junk files.
+        if item.is_file() and item.name not in ['.DS_Store']:
+            file_list.append(item)
+
+    file_list.sort()
+    log(f"Found {len(file_list)} files in the 'static' directory to list.")
+    return file_list
+### --- END NEW --- ###
+
+
+def generate_header(mode: str, with_public_html: bool = False) -> str:
     """Generates the header content for the output file."""
     common_instructions = """
 **Instructions for AI:**
 1.  **Analyze Structure:** Understand the Hugo project layout (config, content, layouts, assets, static structure).
-2.  **Focus on Code/Config:** Pay close attention to Hugo templates (.html), SCSS (.scss), JavaScript (.js), configuration files (.toml, .yaml, .json), Go module files (go.mod, go.sum), and Node config (package.json).
-3.  **Understand Content:** Review markdown content files (.md) for site text and structure.
-4.  **Identify Customizations:** Note custom logic in layouts, partials, shortcodes, SCSS, and JS compared to standard Hugo/theme practices.
-5.  **Note Dependencies:** Identify key dependencies from go.mod/go.sum and package.json.
-6.  **Library & Image Files:** Files listed as `=== LIBRARY FILE: ... ===` or `=== IMAGE FILE: ... ===` are pointers to third-party code or binary assets. Their content is NOT included, but their existence and path are important context.
-7.  **Ignore Irrelevant Data:** Skip over binary data representations or verbose dependency code if accidentally included. Focus on the content provided below.
-8.  **Primary Goal:** Use this information to answer questions about the website's implementation, structure, features, styling, configuration, and potential areas for improvement or troubleshooting.
-9.  Provide Code with focus toward with minimal commenting
-10. dont include {{{{/* comments */}}}}, every time it confuses hugo and causes errors
-11. If we are copying or moving files, provide the bash command to accomplish this
-12. We don't need to make backups of files before big edits - there is sufficient rollback capability in dev environment
+2.  **Primary Goal:** Use this information to answer questions about the website's implementation, structure, features, styling, configuration, and potential areas for improvement or troubleshooting.
+3.  Provide Code with focus toward with minimal commenting
+4. dont include {{{{/* comments */}}}}, every time it confuses hugo and causes errors
+5. If we are copying or moving files, provide the bash command to accomplish this
+6. We don't need to make backups of files before big edits - there is sufficient rollback capability in dev environment
+7. If a solution is found for a particularly difficult issue, suggest updates to these instructions (generate_context.py)
+8. If code contains a code block, special handling may be required as the ``` often break the codeblock implementation
+9. Format code changes in a way that is most simple for an LLM (gemini, copilot) to integrate - this could be one single code block. It is not necessary to provide human instructions that highlight the specific lines being updated.
+10. indicate which file it is to be updated, outside of the file codeblock
 """
-    if mode == "diff":
-        checkpoint_ts_str = "ERROR: Checkpoint file missing!"
-        if checkpoint_file and checkpoint_file.exists():
-            checkpoint_mtime = checkpoint_file.stat().st_mtime
-            checkpoint_ts = datetime.fromtimestamp(checkpoint_mtime)
-            checkpoint_ts_str = checkpoint_ts.strftime('%Y-%m-%d %H:%M:%S %Z')
-
-        return f"""--- START OF PROJECT CONTEXT UPDATE  ---
-
-This file contains ONLY the content of key files that have been MODIFIED since the last full context checkpoint was generated. Library and image files are listed by path only.
-
-**Checkpoint File:** {checkpoint_file.relative_to(PROJECT_ROOT) if checkpoint_file else 'N/A'}
-**Checkpoint Timestamp:** {checkpoint_ts_str}
-{common_instructions.replace("1.  Analyze Structure...", "1.  **Apply Updates:** Use the content below to update your understanding of the project based on the changes since the checkpoint timestamp. Prioritize this information when it conflicts with previous context from the full checkpoint. Remember this is NOT the full project, only the changed files. Refer back to the full checkpoint if needed for unchanged files or broader structure.")}
---- MODIFIED FILE CONTENTS START ---
-"""
-    elif mode == "layouts":
+    if mode == "layouts":
         return f"""--- START OF PROJECT CONTEXT (Layouts Only) ---
 
-This file contains the content of files found within all 'layouts' directories in the project. Library and image files are listed by path only.
+This file contains the content of files found within all 'layouts' directories in the project. Image files are listed by path only.
 
 **Project Root:** {PROJECT_ROOT}
 **Generated on:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S %Z')}
@@ -270,7 +230,8 @@ This file contains the content of files found within all 'layouts' directories i
 
         return f"""--- START OF PROJECT CONTEXT (Full Checkpoint) ---
 
-This file contains the content of key configuration, source code, layout, and content files for the project. Library and image files are listed by path only. This serves as a full checkpoint.{public_html_note}
+This file contains the content of key configuration, source code, layout, and content files for the project. Image files are listed by path only. This serves as a full checkpoint.{public_html_note}
+It also contains a complete listing of all files found in the 'static' directory.
 
 **Project Root:** {PROJECT_ROOT}
 **Generated on:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S %Z')}
@@ -280,17 +241,15 @@ This file contains the content of key configuration, source code, layout, and co
 
 def generate_footer(mode: str) -> str:
     """Generates the footer content."""
-    if mode == "diff":
-        return "\n--- END OF PROJECT CONTEXT UPDATE ---"
-    elif mode == "layouts":
+    if mode == "layouts":
         return "\n--- END OF PROJECT LAYOUTS CONTEXT ---"
     else: # mode == "full"
         return "\n--- END OF PROJECT CONTEXT ---"
 
-def create_context_file(mode: str, with_public_html: bool):
+### --- MODIFIED --- ###
+def generate_context(mode: str, with_public_html: bool):
     """Main function to generate the context file based on the mode."""
     log(f"Project Root: {PROJECT_ROOT}")
-    checkpoint_mtime = None
     target_output_file = None
 
     if mode == "full":
@@ -298,19 +257,6 @@ def create_context_file(mode: str, with_public_html: bool):
         log(f"Mode: Generating FULL context checkpoint -> {target_output_file.relative_to(PROJECT_ROOT)}")
         if with_public_html:
             log("Including HTML files from 'public' directory.")
-    elif mode == "diff":
-        target_output_file = DIFF_OUTPUT_FILE
-        log(f"Mode: Generating DIFF context based on {FULL_OUTPUT_FILE.relative_to(PROJECT_ROOT)} -> {target_output_file.relative_to(PROJECT_ROOT)}")
-        if not FULL_OUTPUT_FILE.exists():
-            log(f"Error: Checkpoint file '{FULL_OUTPUT_FILE}' not found. Please run with --full first.")
-            sys.exit(1)
-        try:
-            checkpoint_mtime = FULL_OUTPUT_FILE.stat().st_mtime
-        except OSError as e:
-             log(f"Error: Could not read checkpoint file timestamp {FULL_OUTPUT_FILE}: {e}")
-             sys.exit(1)
-        if with_public_html:
-            log("Note: --with-public-html is typically used with --full. For --diff, it will include public HTML files modified since the checkpoint if any.")
     elif mode == "layouts":
         target_output_file = LAYOUTS_OUTPUT_FILE
         log(f"Mode: Generating LAYOUTS context -> {target_output_file.relative_to(PROJECT_ROOT)}")
@@ -326,25 +272,36 @@ def create_context_file(mode: str, with_public_html: bool):
         log(f"Error: Could not create output directory {TMP_DIR}: {e}")
         sys.exit(1)
 
-    files_to_process = find_relevant_files(PROJECT_ROOT, checkpoint_mtime, mode=mode, with_public_html=with_public_html)
+    files_to_process = find_relevant_files(PROJECT_ROOT, mode=mode, with_public_html=with_public_html)
+
+    # NEW: Get the list of static files for the full report
+    static_files_list = []
+    if mode == 'full':
+        static_files_list = list_static_files(PROJECT_ROOT)
+
 
     log(f"Generating context file: {target_output_file.relative_to(PROJECT_ROOT)}")
-    header = generate_header(mode, FULL_OUTPUT_FILE if mode == "diff" else None, with_public_html if mode == "full" else False)
+    header = generate_header(mode, with_public_html if mode == 'full' else False)
     footer = generate_footer(mode)
 
     try:
         with open(target_output_file, "w", encoding="utf-8") as outfile:
             outfile.write(header + "\n")
 
+            # NEW: Write the static file listing section if applicable
+            if mode == 'full' and static_files_list:
+                outfile.write("\n=== STATIC DIRECTORY FILE MANIFEST ===\n")
+                outfile.write("The following is a complete list of all files found in the 'static' directory:\n\n")
+                for file_path in static_files_list:
+                    relative_path = file_path.relative_to(PROJECT_ROOT)
+                    outfile.write(f"- {relative_path.as_posix()}\n")
+                outfile.write("\n" + ("=" * 80) + "\n") # Separator
+
             for file_path in files_to_process:
                 relative_path = file_path.relative_to(PROJECT_ROOT)
                 file_extension = file_path.suffix.lower()
 
-                # Check for packaged library files first
-                if is_packaged_library_file(file_path, PROJECT_ROOT):
-                    log(f"  Listing library file: {relative_path.as_posix()}")
-                    outfile.write(f"\n=== LIBRARY FILE: {relative_path.as_posix()} ===\n")
-                elif file_extension in IMAGE_EXTENSIONS:
+                if file_extension in IMAGE_EXTENSIONS:
                     log(f"  Listing image: {relative_path.as_posix()}")
                     outfile.write(f"\n=== IMAGE FILE: {relative_path.as_posix()} ===\n")
                 else:
@@ -367,46 +324,39 @@ def create_context_file(mode: str, with_public_html: bool):
     file_size = target_output_file.stat().st_size
     log(f"Successfully generated context file: {target_output_file.relative_to(PROJECT_ROOT)} ({file_size} bytes)")
 
-    if not files_to_process:
+    if not files_to_process and not static_files_list:
          log("Warning: No files matched the criteria to be included in the output.")
     elif file_size < 1000 and (mode == 'full' or mode == 'layouts'):
-         log(f"Warning: The generated {mode} context is very small. Please verify contents and include/exclude rules.")
+         log(f"Warning: The generated {mode} context file is very small. Please verify contents and include/exclude rules.")
+### --- END MODIFIED --- ###
 
 
 def main():
     """Parses command line arguments and runs the script."""
     parser = argparse.ArgumentParser(
-        description="Generate a context file with project source code for AI analysis.",
+        description="Generate a context file with project source code for AI analysis. Defaults to '--full' if no mode is specified.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=f"""
 Examples:
-  Generate a full context checkpoint:
+  Generate a full context checkpoint (default action):
+    {sys.argv[0]}
     {sys.argv[0]} --full
 
-  Generate a full context checkpoint and include HTML files from the 'public' directory:
+  Generate a full context and include HTML files from the 'public' directory:
     {sys.argv[0]} --full --with-public-html
-
-  Generate a context file with changes since the last full checkpoint:
-    {sys.argv[0]} --diff
 
   Generate a context file with only content from 'layouts' directories:
     {sys.argv[0]} --layouts
 """
     )
-    group = parser.add_mutually_exclusive_group(required=True)
+    # If no mode flag is given, args.mode will be None, and we'll default to 'full'.
+    group = parser.add_mutually_exclusive_group(required=False)
     group.add_argument(
         "-f", "--full",
         action="store_const",
         const="full",
         dest="mode",
         help=f"Generate the full project context checkpoint ({FULL_OUTPUT_FILE.relative_to(PROJECT_ROOT)})."
-    )
-    group.add_argument(
-        "-d", "--diff",
-        action="store_const",
-        const="diff",
-        dest="mode",
-        help=f"Generate context with files modified since the last full checkpoint ({DIFF_OUTPUT_FILE.relative_to(PROJECT_ROOT)})."
     )
     group.add_argument(
         "-l", "--layouts",
@@ -422,7 +372,11 @@ Examples:
     )
 
     args = parser.parse_args()
-    create_context_file(args.mode, args.with_public_html)
+
+    # Default to 'full' mode if no other mode is selected
+    mode = args.mode or "full"
+
+    generate_context(mode, args.with_public_html)
 
 if __name__ == "__main__":
     main()

@@ -35,6 +35,16 @@
             padding: 1rem 1.25rem;
             font-weight: 600;
         }
+        .btn-outline-primary {
+            color: $white;
+            border-color: rgba($white, 0.75);
+
+            &:hover {
+                background-color: $white;
+                color: $secondary;
+                border-color: $white;
+            }
+        }
     }
     &__education{
         &_item{

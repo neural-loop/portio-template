@@ -42,8 +42,8 @@
   </div>
 
   {{ $maskImageResource := resources.Get "images/hero/hero-mask-svg.png" }}
-  <div class="mask-image-contain" style='-webkit-mask-image: url({{ $maskImageResource.RelPermalink }}); mask-image: url({{ $maskImageResource.RelPermalink }});'>
-    {{ partial "image.html" (dict "Src" .image "Alt" "hero-image" "Context" .) }}
+  <div class="mask-image-contain" style="-webkit-mask-image: url('{{ $maskImageResource.RelPermalink }}'); mask-image: url('{{ $maskImageResource.RelPermalink }}');">
+    {{ partial "image.html" (dict "Src" .image "Alt" "hero-image" "Context" . "Loading" "eager" "FetchPriority" "high") }}
   </div>
 
   {{ if .videoURL }}
@@ -51,7 +51,7 @@
     <div class="thumb">
        {{ partial "image.html" (dict "Src" .videoThumb "Alt" "popup thumbnail" "Context" . )}}
     </div>
-    <a href="{{ .videoURL }}" type="button" class="popup-button text-center big">
+    <a href="{{ .videoURL }}" type="button" class="popup-button text-center big" aria-label="Play video">
       <svg xmlns="http://www.w3.org/2000/svg" width="21" height="24" viewBox="0 0 21 24">
         <path d="M17.961 10.264a2 2 0 010 3.473L2.992 22.29A2 2 0 010 20.554V3.446A2 2 0 012.992 1.71z"
           data-name="Polygon 4" />

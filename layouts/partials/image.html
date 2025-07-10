@@ -5,6 +5,7 @@
 {{ $resize:= .Resize | default true }}
 {{ $alt:= .Alt }}
 {{ $loading:= .Loading | default "lazy" }}
+{{ $fetchPriority := .FetchPriority }}
 {{ $context:= .Context | default . }}
 {{ $contentImage:= false }}
 {{ $assetImage:= false }}
@@ -34,13 +35,15 @@
 <!-- image static/CDN -->
 {{ if or (hasPrefix $imagePath "http") (fileExists (add `static/` (string $imagePath))) }}
 <img
-        loading="{{ .Loading }}"
+        loading="{{ $loading }}"
         decoding="async"
         src="{{ $imagePath | absURL }}"
         alt="{{ .Alt }}"
         class="{{ $class }} img"
-        height="{{ $height }}"
-        width="{{ $width }}" />
+        {{- with $fetchPriority }} fetchpriority="{{ . }}"{{ end -}}
+        {{- with $width }} width="{{ . }}"{{ end -}}
+        {{- with $height }} height="{{ . }}"{{ end -}}
+/>
 {{ else }}
 <!-- /image cdn -->
 
@@ -77,6 +80,7 @@
         decoding="async"
         alt="{{ .Alt }}"
         class="{{ $class }} img"
+        {{- with $fetchPriority }} fetchpriority="{{ . }}"{{ end -}}
         width="{{ $width }}"
         height="{{ $height }}" />
 {{ else }}
@@ -126,6 +130,7 @@
 
         alt="{{ .Alt }}"
         class="{{ if $placeholder }}lazy{{ end }} {{ $class }} img"
+        {{- with $fetchPriority }} fetchpriority="{{ . }}"{{ end -}}
         width="{{- with $width -}}
             {{- . -}}
           {{- else -}}
@@ -183,6 +188,7 @@
         {{ end }}
 
         class="{{ if $placeholder }}lazy{{ end }} {{ $class }} img"
+        {{- with $fetchPriority }} fetchpriority="{{ . }}"{{ end -}}
         width="{{- with $width -}}
             {{- . -}}
           {{- else -}}
@@ -260,6 +266,7 @@
               lazy
             {{ end }} {{ $class }} img"
             alt="{{ .Alt }}"
+            {{- with $fetchPriority }} fetchpriority="{{ . }}"{{ end -}}
             width="{{ $image.Width }}"
             height="{{ $image.Height }}" />
 </picture>

@@ -73,6 +73,16 @@
           display: none;
         }
       }
+      .btn-outline-primary {
+        color: $white;
+        border-color: rgba($white, 0.75);
+
+        &:hover {
+          background-color: $white;
+          color: $secondary;
+          border-color: $white;
+        }
+      }
     }
   }
 }

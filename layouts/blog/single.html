@@ -3,13 +3,10 @@
 {{ partial "page-header.html" . }}
 
 <section class="section singleBlog">
-  <div class="svg-img">
-    {{ partial "image.html" (dict "Src" "images/hero/figure-svg.svg" "Context" .) }}
-  </div>
   <div class="animate-shape">
     {{ partial "svg-blob.html" (dict "id" "single-blog") }}
   </div>
-  <div class="animate-pattern">
+  <div class="animate-pattern" style="z-index:-10">
     {{ partial "image.html" (dict "Src" "images/service/background-pattern.svg" "Context" .) }}
   </div>
   <div class="container">
