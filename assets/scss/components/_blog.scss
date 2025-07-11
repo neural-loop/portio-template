@@ -16,7 +16,6 @@
         img {
             height: 100%;
             width: 100%;
-            transition: all 0.3s ease;
         }
     }
     &__content {
@@ -53,7 +52,6 @@
             font-size: $h5-font-size;
             font-weight: 600;
             line-height: 1.4;
-            transition: color 0.3s ease;
         }
     }
 }
@@ -62,7 +60,6 @@
 .blog-card-link {
     display: block;
     text-decoration: none;
-    transition: all 0.3s ease;
 
     &:hover {
         text-decoration: none;

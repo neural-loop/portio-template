@@ -18,11 +18,8 @@ module.exports = {
           'text-success',
           'text-danger',
           'text-info',
-          'lazy',
-          'swiper-pagination-bullet',
-          'swiper-pagination-bullet-active'
+          'lazy'
         ],
-        deep: [/swiper/],
         greedy: [/navbar-toggler-icon/],
       }
     }

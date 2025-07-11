@@ -1,9 +1,11 @@
+import { Offcanvas } from 'bootstrap';
+
 document.addEventListener('DOMContentLoaded', function () {
-  // Change navigation color on scroll
+  // --- Navbar color change on scroll ---
   const navbar = document.querySelector('.navbar');
   if (navbar) {
     window.addEventListener('scroll', () => {
-      if (document.documentElement.scrollTop > 200) {
+      if (document.documentElement.scrollTop > 50) {
         navbar.classList.add('nav__color__change');
       } else {
         navbar.classList.remove('nav__color__change');
@@ -11,24 +13,48 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // The custom smooth-scrolling JS has been removed to prevent conflicts with Bootstrap tabs.
-  // It is replaced by the `scroll-behavior: smooth;` rule in the main SCSS file.
+  // --- Custom Smooth Scroll for ALL on-page anchors ---
+  const anchorLinks = document.querySelectorAll('a[href^="#"]');
+  const offcanvasNavbar = document.getElementById('offcanvasNavbar');
 
-  // Collapse mobile navbar after a link is clicked
-  const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
-  const navbarCollapse = document.querySelector('.navbar-collapse');
-  
-  if (navbarCollapse) {
-    navLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        // Check if the navbar is actually collapsible and currently shown
-        if (navbarCollapse.classList.contains('show')) {
-           new bootstrap.Collapse(navbarCollapse).hide();
+  // Get an instance of the offcanvas component, if it exists
+  const bsOffcanvas = offcanvasNavbar ? Offcanvas.getOrCreateInstance(offcanvasNavbar) : null;
+
+  anchorLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      let hash = this.getAttribute('href');
+
+      // Don't intercept clicks on empty hashes or elements that just toggle other components
+      if (hash === '#' || this.getAttribute('data-bs-toggle')) return;
+
+      const targetElement = document.querySelector(hash);
+
+      if (targetElement) {
+        e.preventDefault(); // Take complete control of the click
+
+        // If the offcanvas is open, hide it first.
+        if (bsOffcanvas && offcanvasNavbar.classList.contains('show')) {
+          bsOffcanvas.hide();
         }
-      });
-    });
-  }
 
-  // Waypoints and Testimonial Slider will be initialized via main.js after we install them via npm.
-  // We'll leave the logic out of this file for now to keep it clean.
+        // --- Calculate scroll position with navbar offset ---
+        const navbarEl = document.querySelector('.navbar.fixed-top');
+        const navbarHeight = navbarEl ? navbarEl.offsetHeight : 0;
+        // Add a 20px buffer so the section title isn't jammed against the navbar
+        const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - navbarHeight - 20;
+
+        // Scroll to the target. We use a small timeout to allow the offcanvas
+        // closing animation to start, preventing a visual jump.
+        setTimeout(() => {
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+          });
+
+          // Update URL hash without causing a page jump
+          history.pushState(null, null, hash);
+        }, 150); // A 150ms delay is usually sufficient
+      }
+    });
+  });
 });

@@ -94,7 +94,6 @@
       bottom: 80px;
       left: 0;
       transform: translateX(-50%);
-      transition: all 0.3s ease;
       @include desktop {
         bottom: -40px;
         left: 50%;
@@ -133,14 +132,11 @@
         background: #ffffff;
         border-radius: 50%;
         z-index: 2;
-        transition: all 0.3s ease;
         svg {
           position: absolute;
           top: 50%;
           left: 55%;
           transform: translate(-50%, -50%);
-          transition: all 0.3s ease;
-
           path {
             fill: $primary;
           }
@@ -181,3 +177,23 @@
     transform: translateY(15px);
   }
 }
+
+// START: Fix for unwanted page-load animations
+// The following rules disable unwanted "slide-in" or "fade-in" animations
+// on hero section elements that occur on page load.
+.hero_content > *,
+.hero_figure > .mask-image-contain {
+  animation: none !important;
+  transition: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.hero_figure-popup {
+  // For the video popup, we only disable the animation and transition
+  // to avoid breaking its transform-based positioning.
+  animation: none !important;
+  transition: none !important;
+  opacity: 1 !important;
+}
+// END: Fix for unwanted page-load animations

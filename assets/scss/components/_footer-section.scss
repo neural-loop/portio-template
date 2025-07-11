@@ -1,144 +1,144 @@
 .footer {
+  position: relative;
+  margin-top: 100px;
+  padding-top: 0px;
+  &__background {
+    background: $dark-background;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: skewY(-2deg);
+  }
+  &__cta {
+    background: darken($primary, 10%);
+    padding: 100px 80px;
+    border-radius: 20px;
+    display: flex;
+    align-items: flex-end;
+    margin-top: -110px;
+    flex-wrap: wrap;
     position: relative;
-    margin-top: 100px;
-    padding-top: 0px;
-    &__background {
-        background: $dark-background;
+    overflow: hidden;
+    z-index: 5;
+    .shape-1 {
+      position: absolute;
+      z-index: -1;
+      transform: rotate(-20deg);
+      top: -43%;
+      left: 2%;
+      animation: moveLeft 5s infinite linear;
+      svg {
+        path {
+          fill: #ffffff;
+          opacity: 0.07;
+        }
+      }
+    }
+    .shape-2 {
+      position: absolute;
+      z-index: -1;
+      transform: rotate(80deg);
+      top: 12%;
+      right: -9%;
+      width: 235px;
+      height: 208px;
+      animation: move_top 3s infinite linear;
+      svg {
         height: 100%;
         width: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        transform: skewY(-2deg);
+        path {
+          fill: #ffffff;
+          opacity: 0.07;
+        }
+      }
     }
-    &__cta {
-        background: darken($primary, 10%);
-        padding: 100px 80px;
-        border-radius: 20px;
-        display: flex;
-        align-items: flex-end;
-        margin-top: -110px;
-        flex-wrap: wrap;
+    @include desktop {
+      padding: 40px;
+    }
+    &_content {
+      width: 60%;
+      @include desktop {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      span {
+        font-size: 20px;
+        display: block;
+        line-height: 1;
+        margin: 0 0 20px 40px;
         position: relative;
-        overflow: hidden;
-        z-index: 5;
-        .shape-1 {
-            position: absolute;
-            z-index: -1;
-            transform: rotate(-20deg);
-            top: -43%;
-            left: 2%;
-            animation: moveLeft 5s infinite linear;
-            svg {
-                path {
-                    fill: #ffffff;
-                    opacity: 0.07;
-                }
-            }
-        }
-        .shape-2 {
-            position: absolute;
-            z-index: -1;
-            transform: rotate(80deg);
-            top: 12%;
-            right: -9%;
-            width: 235px;
-            height: 208px;
-            animation: move_top 3s infinite linear;
-            svg {
-                height: 100%;
-                width: 100%;
-                path {
-                    fill: #ffffff;
-                    opacity: 0.07;
-                }
-            }
-        }
         @include desktop {
-            padding: 40px;
+          display: inline-block;
         }
-        &_content {
-            width: 60%;
-            @include desktop {
-                width: 100%;
-                text-align: center;
-                margin-bottom: 20px;
-            }
-            span {
-                font-size: 20px;
-                display: block;
-                line-height: 1;
-                margin: 0 0 20px 40px;
-                position: relative;
-                @include desktop {
-                    display: inline-block;
-                }
-                &::before {
-                    position: absolute;
-                    content: "";
-                    height: 2px;
-                    width: 20px;
-                    left: -40px;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    background: #fff;
-                }
-            }
+        &::before {
+          position: absolute;
+          content: "";
+          height: 2px;
+          width: 20px;
+          left: -40px;
+          top: 50%;
+          transform: translateY(-50%);
+          background: #fff;
         }
-        &_action {
-            width: 40%;
-            @include desktop {
-                width: 100%;
-                text-align: center;
-            }
-            a {
-                float: right;
-                @include desktop {
-                    float: none;
-                }
-            }
-        }
+      }
     }
-    &__widget {
-        padding: 100px 0;
+    &_action {
+      width: 40%;
+      @include desktop {
+        width: 100%;
+        text-align: center;
+      }
+      a {
+        float: right;
         @include desktop {
-            text-align: center;
-            padding: 50px 0;
-            .footer__widget_address {
-                ul {
-                    margin-right: 2.14285714em; // match fa-lu margin
-                }
-            }
+          float: none;
         }
+      }
     }
-    &__footer {
-        padding: 50px 0;
-        border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  &__widget {
+    padding: 100px 0;
+    @include desktop {
+      text-align: center;
+      padding: 50px 0;
+      .footer__widget_address {
+        ul {
+          margin-right: 2.14285714em; // match fa-lu margin
+        }
+      }
+    }
+  }
+  &__footer {
+    padding: 50px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    @include desktop {
+      text-align: center;
+    }
+    &_social {
+      ul {
+        float: right;
         @include desktop {
-            text-align: center;
+          margin: 20px auto 0;
+          float: none;
         }
-        &_social {
-            ul {
-                float: right;
-                @include desktop {
-                    margin: 20px auto 0;
-                    float: none;
-                }
-            }
-        }
+      }
     }
+  }
 }
 @keyframes moveLeft {
-    0%,
-    100% {
-        -webkit-transform: translateX(0) rotate(-20deg);
-        transform: translateX(0) rotate(-20deg);
-    }
+  0%,
+  100% {
+    -webkit-transform: translateX(0) rotate(-20deg);
+    transform: translateX(0) rotate(-20deg);
+  }
 
-    50% {
-        -webkit-transform: translateX(15px) rotate(-20deg);
-        transform: translateX(15px) rotate(-20deg);
-    }
+  50% {
+    -webkit-transform: translateX(15px) rotate(-20deg);
+    transform: translateX(15px) rotate(-20deg);
+  }
 }
 
 
@@ -149,6 +149,17 @@
   border: 1px solid rgba(255,255,255,0.2);
   padding: 2.5rem;
   border-radius: 20px;
+}
+
+@keyframes pulse-border-glow {
+  0%, 10%, 20%, 100% {
+    background-color: transparent;
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+  5%, 15% {
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.4);
+  }
 }
 
 .button-toggle-container {
@@ -174,33 +185,41 @@
       border-color: $white;
       color: $secondary; // No longer needs !important
       &:hover {
-          background-color: darken($white, 10%);
-          border-color: darken($white, 10%);
-          color: $secondary;
+        background-color: darken($white, 10%);
+        border-color: darken($white, 10%);
+        color: $secondary;
       }
     }
 
-    // Inactive button style
+    // Inactive button style (general)
     &.btn-outline-primary {
       background-color: transparent;
       border-color: $white;
-      color: $white; // No longer needs !important
+      color: $white;
       &:hover {
         background-color: $white;
         color: $secondary;
+      }
+    }
+
+    // Specific animation for the calendar button only when it's inactive
+    &#show-calendar-btn.btn-outline-primary {
+      animation: pulse-border-glow 5s infinite;
+      &:hover {
+        animation: none; // Pause animation on hover
       }
     }
   }
 }
 
 #calendar-container {
-    .text-warning {
-        color: #ffc107 !important;
-    }
-    .text-info {
-        color: #17a2b8 !important;
-    }
-    .text-danger {
-        color: #dc3545 !important;
-    }
+  .text-warning {
+    color: #ffc107 !important;
+  }
+  .text-info {
+    color: #17a2b8 !important;
+  }
+  .text-danger {
+    color: #dc3545 !important;
+  }
 }

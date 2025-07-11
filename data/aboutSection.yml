@@ -9,7 +9,7 @@ content: >
 
   I hold a Doctorate in Education (Ed.S) with a focus on Adult Education and Curriculum Design, and I am a certified Neurolinguistic Practitioner. My passion is to act as a "translator," making complex concepts accessible and helping technical experts connect with their audience.
 button1Name: My Experience
-button2Name: Download CV
+button2Name: Let's Talk
 button1Target: "#resume"
-button2Target: "Georgette_Clay_Resume.pdf"
+button2Target: "#contact"
 image: images/about/georgette-clay.jpg

@@ -3,7 +3,7 @@ languageCode = "en-us"
 title = "Georgette Clay MA, Ed.S | Public Speaking & Curriculum Design"
 
 [pagination]
-pagerSize = 6
+pagerSize = 12
 
 [markup]
 [markup.goldmark]
@@ -11,9 +11,6 @@ pagerSize = 6
 unsafe = true
 
 # Main Menu
-[[menu.main]]
-name = "Home"
-url = "#home"
 weight = 1
 [[menu.main]]
 name = "About"

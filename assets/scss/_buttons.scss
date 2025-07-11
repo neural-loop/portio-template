@@ -33,10 +33,36 @@
 }
 
 .btn-zoom {
-  transition: all 0.3s ease;
   transform: scale(1);
   &:hover {
     box-shadow: 0 8px 20px rgba(134, 102, 48, 0.3);
     transform: scale(1.03);
   }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    background-color: $primary;
+    box-shadow: 0 0 0 0 rgba(lighten($primary, 20%), 0);
+  }
+  5% {
+    background-color: lighten($primary, 10%);
+    box-shadow: 0 0 10px 3px rgba(lighten($primary, 20%), 0.5);
+  }
+  10% {
+    background-color: $primary;
+    box-shadow: 0 0 0 0 rgba(lighten($primary, 20%), 0);
+  }
+  15% {
+    background-color: lighten($primary, 10%);
+    box-shadow: 0 0 10px 3px rgba(lighten($primary, 20%), 0.5);
+  }
+  20% {
+    background-color: $primary;
+    box-shadow: 0 0 0 0 rgba(lighten($primary, 20%), 0);
+  }
+}
+
+.btn-pulse {
+  animation: pulse-glow 5s infinite;
 }

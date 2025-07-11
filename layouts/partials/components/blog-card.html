@@ -2,7 +2,8 @@
     <a href="{{ .Permalink }}" class="blog-card-link">
         <div class="blog-card">
             <div class="blog-card__thumb">
-                {{ partial "image.html" (dict "Src" .Params.featureImage "Alt" .Title "Context" . )}}
+                {{ $cardImageSizes := "(max-width: 991px) 80vw, 30vw" }}
+                {{ partial "image.html" (dict "Src" .Params.featureImage "Alt" .Title "Context" . "Sizes" $cardImageSizes )}}
             </div>
             <div class="blog-card__content bg-white">
                 <span class="small">{{ .PublishDate.Format "January 2, 2006" }}</span>

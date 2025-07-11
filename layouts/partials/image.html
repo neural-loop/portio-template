@@ -1,281 +1,72 @@
-{{ $imagePath:= .Src }}
-{{ $image:= . }}
-{{ $class:= .Class }}
-{{ $size:= .Size }}
-{{ $resize:= .Resize | default true }}
-{{ $alt:= .Alt }}
-{{ $loading:= .Loading | default "lazy" }}
+{{ $src := .Src }}
+{{ $alt := .Alt | default $src }}
+{{ $class := .Class }}
+{{ $loading := .Loading | default "lazy" }}
 {{ $fetchPriority := .FetchPriority }}
-{{ $context:= .Context | default . }}
-{{ $contentImage:= false }}
-{{ $assetImage:= false }}
-{{ $sizeValue:= index (split $size ` `) 0 }}
-{{ $height:= index (split $sizeValue `x`) 1 }}
-{{ $width:= index (split $sizeValue `x`) 0 }}
-{{ $webp:= .Webp | default true }}
-{{ $command:= .Command | default "Resize" }}
-{{ $placeholder:= .Placeholder | default false }}
-{{ $placeholderQuality:= "40x q20" }}
+{{ $sizes := .Sizes | default "(max-width: 991px) 100vw, 50vw" }}
+{{ $context := .Context | default . }}
 
-
-<!-- check content image  -->
-{{ with $context.Resources }}
-{{ if .GetMatch $imagePath }}
-{{ $contentImage = true }}
-{{ end }}
-{{ end }}
-<!-- /check content image -->
-
-<!-- check asset image -->
-{{ if fileExists (add `assets/` (string $imagePath)) }}
-{{ $assetImage = true }}
-{{ end }}
-<!-- /check asset image -->
-
-<!-- image static/CDN -->
-{{ if or (hasPrefix $imagePath "http") (fileExists (add `static/` (string $imagePath))) }}
-<img
-        loading="{{ $loading }}"
-        decoding="async"
-        src="{{ $imagePath | absURL }}"
-        alt="{{ .Alt }}"
-        class="{{ $class }} img"
-        {{- with $fetchPriority }} fetchpriority="{{ . }}"{{ end -}}
-        {{- with $width }} width="{{ . }}"{{ end -}}
-        {{- with $height }} height="{{ . }}"{{ end -}}
-/>
+{{ $image := "" }}
+{{ if hasPrefix $src "http" }}
+    {{ warnf "[image.html] Skipping processing for external image: %s" $src }}
+    {{ $image = $src }}
+{{ else if fileExists (add "assets/" $src) }}
+    {{ $image = resources.Get $src }}
+{{ else if $context.Resources.GetMatch $src }}
+    {{ $image = $context.Resources.GetMatch $src }}
 {{ else }}
-<!-- /image cdn -->
-
-<!-- check file existence -->
-{{ if or $assetImage $contentImage }}
-{{ if $assetImage }}
-{{ $image = resources.Get $imagePath }}
-{{ else if $contentImage }}
-{{ $image = $context.Resources.GetMatch $imagePath }}
+    {{ warnf "[image.html] Image not found: %s in context %s" $src (or $context.File.Path "Site Data") }}
+    {{ return }}
 {{ end }}
 
+{{ $isExternal := eq (printf "%T" $image) "string" }}
 
-<!-- image extension -->
-{{ $imageExt := path.Ext $image }}
-
-
-<!-- image height, width (if not svg) -->
-{{ if eq $imageExt `.svg` }}
-{{ .Scratch.Set "image-height" "" }}
-{{ .Scratch.Set "image-width" "" }}
+{{ if or $isExternal (in (slice ".svg" ".gif") (and (not $isExternal) (path.Ext $image.RelPermalink))) }}
+    <img src="{{ if $isExternal }}{{ $image }}{{ else }}{{ $image.RelPermalink }}{{ end }}" alt="{{ $alt }}" class="{{ $class }}" loading="{{ $loading }}" {{ with $fetchPriority }}fetchpriority="{{ . }}"{{ end }}>
 {{ else }}
-{{ .Scratch.Set "image-height" $image.Height }}
-{{ .Scratch.Set "image-width" $image.Width }}
-{{ end }}
-{{ $imageHeight:= .Scratch.Get "image-height" }}
-{{ $imageWidth:= .Scratch.Get "image-width" }}
+    {{ if .Size }}
+        {{ $size := .Size }}
+        {{ $fallback := $image.Resize $size }}
+        {{ $webp := $image.Resize (printf "%s webp" $size) }}
+        <picture>
+            <source srcset="{{ $webp.RelPermalink }}" type="image/webp">
+            <source srcset="{{ $fallback.RelPermalink }}" type="{{ $fallback.MediaType }}">
+            <img src="{{ $fallback.RelPermalink }}"
+                 alt="{{ $alt }}"
+                 class="{{ $class }}"
+                 width="{{ $fallback.Width }}"
+                 height="{{ $fallback.Height }}"
+                 loading="{{ $loading }}"
+                 {{ with $fetchPriority }}fetchpriority="{{ . }}"{{ end }}>
+        </picture>
+    {{ else }}
+        {{ $sizesAttr := .Sizes | default "(max-width: 991px) 90vw, 45vw" }}
+        {{ $widths := (slice 320 480 640 800 1024 1280 1600) }}
+        {{ $webpSrcset := "" }}
+        {{ $fallbackSrcset := "" }}
+        {{ $smallestFallback := $image.Resize "320x" }}
+        {{ $largestFallback := $image.Resize "1600x" }}
 
-
-<!-- gif/svg image -->
-{{ if or (eq $imageExt `.gif`) (eq $imageExt `.svg`) }}
-<img
-        src="{{ $image.RelPermalink }}"
-        loading="{{$loading}}"
-        decoding="async"
-        alt="{{ .Alt }}"
-        class="{{ $class }} img"
-        {{- with $fetchPriority }} fetchpriority="{{ . }}"{{ end -}}
-        width="{{ $width }}"
-        height="{{ $height }}" />
-{{ else }}
-<!-- single image -->
-{{ if $size }}
-<!-- resize -->
-{{ $imageFallback:= $image.Resize $size }}
-{{ $imageWebp:= $image.Resize (add (string $size) " webp") }}
-{{ if not $webp }}
-{{ $imageWebp = $image.Resize (string $size) }}
-{{ end }}
-<!-- fit -->
-{{ if eq $command "Fit" }}
-{{ $imageFallback = $image.Fit $size }}
-{{ $imageWebp = $image.Fit (add (string $size) " webp") }}
-{{ if not $webp }}
-{{ $imageWebp = $image.Fit (string $size) }}
-{{ end }}
-<!-- fill -->
-{{ else if eq $command "Fill" }}
-{{ $imageFallback = $image.Fill $size }}
-{{ $imageWebp = $image.Fill (add (string $size) " webp") }}
-{{ if not $webp }}
-{{ $imageWebp = $image.Fill (string $size) }}
-{{ end }}
-<!-- crop -->
-{{ else if eq $command "Crop" }}
-{{ $imageFallback = $image.Crop $size }}
-{{ $imageWebp = $image.Crop (add (string $size) " webp") }}
-{{ if not $webp }}
-{{ $imageWebp = $image.Crop (string $size) }}
-{{ end }}
-{{ end }}
-
-
-<!-- placeholder -->
-{{ $placeholderImage := ($imageWebp.Resize $placeholderQuality) | images.Filter (images.GaussianBlur 5) }}
-
-
-<img
-        {{ if $placeholder }}
-        src="data:image/jpeg;base64,{{ $placeholderImage.Content | base64Encode }}"
-        data-src={{ $imageWebp.RelPermalink }}
-        {{ else }}
-        src="{{ $imageWebp.RelPermalink }}" loading="{{$loading}}" decoding="async"
+        {{ range $widths }}
+            {{ if le . $image.Width }}
+                {{ $w := . }}
+                {{ $webp := $image.Resize (printf "%dx webp" $w) }}
+                {{ $fallback := $image.Resize (printf "%dx" $w) }}
+                {{ $webpSrcset = printf "%s%s %dw, " $webpSrcset $webp.RelPermalink $w }}
+                {{ $fallbackSrcset = printf "%s%s %dw, " $fallbackSrcset $fallback.RelPermalink $w }}
+            {{ end }}
         {{ end }}
 
-        alt="{{ .Alt }}"
-        class="{{ if $placeholder }}lazy{{ end }} {{ $class }} img"
-        {{- with $fetchPriority }} fetchpriority="{{ . }}"{{ end -}}
-        width="{{- with $width -}}
-            {{- . -}}
-          {{- else -}}
-            {{- $imageWebp.Width -}}
-          {{- end -}}
-          "
-        height="{{- with $height -}}
-            {{- . -}}
-          {{- else -}}
-            {{- $imageWebp.Height -}}
-          {{- end -}}
-          "
-        onerror="this.onerror='null';this.src='{{ $imageFallback.RelPermalink }}';" />
-
-<!-- if image size less then 500x and size not defined -->
-{{ else if or (lt ($image.Width) 500) (not $resize) }}
-{{ $size:= add (add (string $image.Width) "x") (string $image.Height) }}
-<!-- resize -->
-{{ $imageWebp:= $image.Resize (add (string $size) " webp") }}
-{{ if not $webp }}
-{{ $imageWebp = $image.Resize (string $size) }}
-{{ end }}
-<!-- fit -->
-{{ if eq $command "Fit" }}
-{{ $imageWebp = $image.Resize (add (string $size) " webp") }}
-{{ if not $webp }}
-{{ $imageWebp = $image.Resize (string $size) }}
-{{ end }}
-<!-- fill -->
-{{ else if eq $command "Fill" }}
-{{ $imageWebp = $image.Resize (add (string $size) " webp") }}
-{{ if not $webp }}
-{{ $imageWebp = $image.Resize (string $size) }}
-{{ end }}
-<!-- crop -->
-{{ else if eq $command "Crop" }}
-{{ $imageWebp = $image.Resize (add (string $size) " webp") }}
-{{ if not $webp }}
-{{ $imageWebp = $image.Resize (string $size) }}
-{{ end }}
-{{ end }}
-
-
-<!-- placeholder -->
-{{ $placeholderImage := ($imageWebp.Resize $placeholderQuality) | images.Filter (images.GaussianBlur 5) }}
-
-
-<img
-        {{ if $placeholder }}
-        src="data:image/jpeg;base64,{{ $placeholderImage.Content | base64Encode }}"
-        data-src={{ $imageWebp.RelPermalink }} alt="placeholder"
-        {{ else }}
-        src="{{ $imageWebp.RelPermalink }}" loading="{{$loading}}" decoding="async"
-        alt="{{ .Alt }}"
-        {{ end }}
-
-        class="{{ if $placeholder }}lazy{{ end }} {{ $class }} img"
-        {{- with $fetchPriority }} fetchpriority="{{ . }}"{{ end -}}
-        width="{{- with $width -}}
-            {{- . -}}
-          {{- else -}}
-            {{- $imageWebp.Width -}}
-          {{- end -}}
-          "
-        height="{{- with $height -}}
-            {{- . -}}
-          {{- else -}}
-            {{- $imageWebp.Height -}}
-          {{- end -}}
-          "
-        onerror="this.onerror='null';this.src='{{ $image.RelPermalink }}';" />
-{{ else }}
-<!-- /if image size less then 500x and size not defined -->
-
-<!-- image processing for multiple device -->
-{{ $imageFallback:= $image.Resize "1110x" }}
-{{ $imageXL:= $image.Resize "1110x webp" }}
-{{ $imageLG:= $image.Resize "700x webp" }}
-{{ $imageMD:= $image.Resize "600x webp" }}
-{{ $imageSM:= $image.Resize "545x webp" }}
-{{ if not $webp }}
-{{ $imageXL = $image.Resize "1110x" }}
-{{ $imageLG = $image.Resize "700x" }}
-{{ $imageMD = $image.Resize "600x" }}
-{{ $imageSM = $image.Resize "545x" }}
-{{ end }}
-
-
-<!-- placeholder -->
-{{ $placeholderImage := ($imageFallback.Resize $placeholderQuality) | images.Filter (images.GaussianBlur 5) }}
-
-
-<picture>
-    <source
-            {{ if $placeholder }}
-            src="data:image/jpeg;base64,{{ $placeholderImage.Content | base64Encode }}"
-            data-srcset={{ $imageFallback.RelPermalink }}
-            {{ else }}
-            srcset="{{ $imageSM.RelPermalink }}"
-            {{ end }}
-            media="(max-width: 575px)" />
-    <source
-            {{ if $placeholder }}
-            src="data:image/jpeg;base64,{{ $placeholderImage.Content | base64Encode }}"
-            data-srcset={{ $imageFallback.RelPermalink }}
-            {{ else }}
-            srcset="{{ $imageMD.RelPermalink }}"
-            {{ end }}
-            media="(max-width: 767px)" />
-    <source
-            {{ if $placeholder }}
-            src="data:image/jpeg;base64,{{ $placeholderImage.Content | base64Encode }}"
-            data-srcset={{ $imageFallback.RelPermalink }}
-            {{ else }}
-            srcset="{{ $imageLG.RelPermalink }}"
-            {{ end }}
-            media="(max-width: 991px)" />
-    <source
-            {{ if $placeholder }}
-            src="data:image/jpeg;base64,{{ $placeholderImage.Content | base64Encode }}"
-            data-srcset={{ $imageFallback.RelPermalink }}
-            {{ else }}
-            srcset="{{ $imageXL.RelPermalink }}"
-            {{ end }} />
-    <img
-            {{ if $placeholder }}
-            src="data:image/jpeg;base64,{{ $placeholderImage.Content | base64Encode }}"
-            data-src={{ $imageFallback.RelPermalink }}
-            {{ else }}
-            loading="{{$loading}}" decoding="async"
-            src="{{ $imageFallback.RelPermalink }}"
-            {{ end }}class="{{ if $placeholder }}
-              lazy
-            {{ end }} {{ $class }} img"
-            alt="{{ .Alt }}"
-            {{- with $fetchPriority }} fetchpriority="{{ . }}"{{ end -}}
-            width="{{ $image.Width }}"
-            height="{{ $image.Height }}" />
-</picture>
-{{ end }}
-<!-- end image processing -->
-{{ end }}
-<!-- end single image -->
-{{ end }}
-
-
-<!-- end check file existence -->
+        <picture>
+            <source type="image/webp" srcset="{{ strings.TrimRight ", " $webpSrcset }}" sizes="{{ $sizesAttr }}">
+            <source type="{{ $largestFallback.MediaType }}" srcset="{{ strings.TrimRight ", " $fallbackSrcset }}" sizes="{{ $sizesAttr }}">
+            <img src="{{ $smallestFallback.RelPermalink }}"
+                 alt="{{ $alt }}"
+                 class="{{ $class }}"
+                 width="{{ $largestFallback.Width }}"
+                 height="{{ $largestFallback.Height }}"
+                 loading="{{ $loading }}"
+                 {{ with $fetchPriority }}fetchpriority="{{ . }}"{{ end }}>
+        </picture>
+    {{ end }}
 {{ end }}

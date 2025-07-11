@@ -12,18 +12,16 @@
                     </div>
                     <p class="text-white mt-4">{{ .subtitle }}</p>
 
-                    <!-- These are now simple anchor links that scroll the page -->
                     <div class="mt-5">
-                        <a href="#experience" class="btn btn-primary d-block text-start mb-2 scroll">{{ .tab1Name }}</a>
-                        <a href="#education" class="btn btn-outline-primary d-block text-start scroll">{{ .tab3Name }}</a>
+                        <a href="#experience" class="btn btn-primary d-block text-start mb-2">{{ .tab1Name }}</a>
+                        <a href="#education" class="btn btn-outline-primary d-block text-start mb-2">{{ .tab3Name }}</a>
+                        <a href="{{ "Georgette Clay, MA, Ed.S - Resume.pdf" | relURL }}" class="btn btn-outline-primary d-block text-start" target="_blank" rel="noopener noreferrer">Download CV</a>
                     </div>
                 </div>
             </div>
             <div class="col-lg-6">
-                <!-- Both sections are now in a single column -->
                 <div class="resume-content-column">
                     
-                    <!-- Work History Section -->
                     <h2 id="experience" class="text-white mb-4">{{ .tab1Name }}</h2>
                     {{ range .experience }}
                     <div class="resume__education_item">

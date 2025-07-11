@@ -68,7 +68,6 @@
     }
     &_item {
       &.js-animation {
-        transition: all 0.3s ease;
         .progress {
           width: 100%;
           background: $light;

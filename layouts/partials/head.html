@@ -8,15 +8,15 @@
   <!-- Meta Description -->
   {{- $description := .Site.Params.description -}}
   {{- if .IsPage -}}
-    {{- with .Params.description -}}
-        {{- $description = . -}}
-    {{- else -}}
-        {{- with .Params.shortDescription -}}
-            {{- $description = . -}}
-        {{- else -}}
-            {{- $description = .Summary -}}
-        {{- end -}}
-    {{- end -}}
+  {{- with .Params.description -}}
+  {{- $description = . -}}
+  {{- else -}}
+  {{- with .Params.shortDescription -}}
+  {{- $description = . -}}
+  {{- else -}}
+  {{- $description = .Summary -}}
+  {{- end -}}
+  {{- end -}}
   {{- end -}}
   <meta name="description" content="{{- $description | plainify | truncate 160 -}}">
 
@@ -27,21 +27,37 @@
 
   <!-- Preload Key Fonts -->
   <link rel="preload" href="/fonts/poppins/poppins-v23-latin-regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/fonts/poppins/poppins-v23-latin-500.woff2" as="font" type="font/woff2" crossorigin="anonymous">
   <link rel="preload" href="/fonts/poppins/poppins-v23-latin-600.woff2" as="font" type="font/woff2" crossorigin="anonymous">
   <link rel="preload" href="/fonts/yeseva-one/yeseva-one-v23-latin-regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
 
   <!-- Stylesheets -->
-  {{ $scss := resources.Get "scss/style.scss" }}
-  {{ if $scss }}
-    {{ $style := $scss | toCSS }}
-    {{ if hugo.IsProduction }}
-      {{ $style = $style | postCSS }}
-    {{ end }}
-    {{ $style = $style | minify }}
-    <link rel="stylesheet" href="{{ $style.Permalink }}" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="{{ $style.Permalink }}"></noscript>
+  {{ $criticalScss := resources.Get "scss/critical.scss" }}
+  {{ $fullScss := resources.Get "scss/style.scss" }}
+
+  {{ if and $criticalScss $fullScss }}
+  <!--
+  Strategy: Inline Critical CSS, Asynchronously Load Full CSS.
+  This prevents a "Flash of Unstyled Content" (FOUC) on page load.
+  -->
+
+  <!-- 1. Process and inline critical CSS -->
+  {{ $criticalCss := $criticalScss | toCSS }}
+  {{ if hugo.IsProduction }}
+  {{ $criticalCss = $criticalCss | postCSS | minify }}
+  {{ end }}
+  <style>{{ $criticalCss.Content | safeCSS }}</style>
+
+  <!-- 2. Process and asynchronously load the full CSS stylesheet -->
+  {{ $fullCss := $fullScss | toCSS }}
+  {{ if hugo.IsProduction }}
+  {{ $fullCss = $fullCss | postCSS | minify }}
+  {{ end }}
+  <link rel="stylesheet" href="{{ $fullCss.Permalink }}" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="{{ $fullCss.Permalink }}"></noscript>
+
   {{ else }}
-    {{ errorf "Failed to find scss/style.scss" }}
+  {{ errorf "Failed to find scss/style.scss or scss/critical.scss" }}
   {{ end }}
 
 

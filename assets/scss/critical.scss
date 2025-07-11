@@ -1,0 +1,45 @@
+/*!------------------------------------------------------------------
+[CRITICAL STYLESHEET]
+This file contains the minimal styles for the above-the-fold content
+to prevent Flash of Unstyled Content (FOUC). It will be inlined.
+-------------------------------------------------------------------*/
+@import "variables";
+@import "fonts";
+
+// We can't import the whole of bootstrap as it's too large for inlining.
+// Instead, we import only the parts needed for the header and hero section.
+// This order is important for Bootstrap's Sass compilation.
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/maps";
+@import "../../node_modules/bootstrap/scss/mixins";
+@import "../../node_modules/bootstrap/scss/utilities";
+@import "../../node_modules/bootstrap/scss/root";
+@import "../../node_modules/bootstrap/scss/reboot";
+@import "../../node_modules/bootstrap/scss/type";
+@import "../../node_modules/bootstrap/scss/containers";
+@import "../../node_modules/bootstrap/scss/grid";
+@import "../../node_modules/bootstrap/scss/nav";
+@import "../../node_modules/bootstrap/scss/navbar";
+@import "../../node_modules/bootstrap/scss/close";
+@import "../../node_modules/bootstrap/scss/offcanvas";
+@import "../../node_modules/bootstrap/scss/buttons";
+@import "../../node_modules/bootstrap/scss/transitions";
+@import "../../node_modules/bootstrap/scss/breadcrumb";
+@import "../../node_modules/bootstrap/scss/pagination";
+@import "../../node_modules/bootstrap/scss/helpers";
+@import "../../node_modules/bootstrap/scss/utilities/api";
+
+// Now import our own base styles and mixins, similar to style.scss
+@import "typography";
+@import "mixins";
+@import "buttons";
+@import "common";
+@import "components/icons";
+
+// Finally, import the styles for the specific components in the viewport on load.
+@import "components/navbar";
+@import "components/hero-section";
+@import "components/page-title";
+@import "components/blog";
+@import "components/single-blog-post";

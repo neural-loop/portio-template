@@ -23,12 +23,14 @@
             <div class="col-lg-6">
                 <div class="skill__thumb">
                     <div class="skill__thumb_pattern">
-                        <img src="images/hero/figure-svg.svg" alt="figure-svg">
+                        {{ partial "image.html" (dict "Src" "images/hero/figure-svg.svg" "Context" . "Size" "150x150" "Alt" "figure-svg") }}
                     </div>
-<div class="skill__thumb_image">
-{{ $maskImageResource := resources.Get "images/skill/skill-mask-svg.svg" }}
-<img src="{{ .image | absURL }}" alt="skill-img" class="mask-image-contain" style='-webkit-mask-image: url({{ $maskImageResource.RelPermalink }}); mask-image: url({{ $maskImageResource.RelPermalink }});' >
-</div>
+                    <div class="skill__thumb_image">
+                        {{ $maskImageResource := resources.Get "images/skill/skill-mask-svg.svg" }}
+                        <div class="mask-image-contain" style='-webkit-mask-image: url("{{ $maskImageResource.RelPermalink }}"); mask-image: url("{{ $maskImageResource.RelPermalink }}");'>
+                            {{ partial "image.html" (dict "Src" .image "Alt" "My skills" "Context" .) }}
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-6">

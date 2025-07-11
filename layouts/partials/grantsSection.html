@@ -16,28 +16,28 @@
           {{ range .awards }}
           <div class="awards-item">
             {{ if .url }}
-              <a href="{{ .url | absURL }}" target="_blank" rel="noopener noreferrer">
-                {{ partial "image.html" (dict "Src" .image "Class" "awards-item-thumb" "Alt" .title "Context" $) }}
-              </a>
+            <a href="{{ .url | absURL }}" target="_blank" rel="noopener noreferrer">
+              {{ partial "image.html" (dict "Src" .image "Class" "awards-item-thumb" "Alt" .title "Context" $ "Size" "500x") }}
+            </a>
             {{ else }}
-              {{ partial "image.html" (dict "Src" .image "Class" "awards-item-thumb" "Alt" .title "Context" $) }}
+            {{ partial "image.html" (dict "Src" .image "Class" "awards-item-thumb" "Alt" .title "Context" $ "Size" "500x") }}
             {{ end }}
             <div class="awards-item-content">
               <span>{{ .category }}</span>
               <h3 class="mb-0">
                 {{ if .url }}
-                  <a class="text-dark" href="{{ .url | absURL }}" target="_blank" rel="noopener noreferrer">{{ .title }}</a>
+                <a class="text-dark" href="{{ .url | absURL }}" target="_blank" rel="noopener noreferrer">{{ .title }}</a>
                 {{ else }}
-                  {{ .title }}
+                {{ .title }}
                 {{ end }}
               </h3>
               <p style="margin-top: 10px;">{{ .description | markdownify }}</p>
               <div>
                 {{ if .url }}
-                  <a class="btn btn-sm btn-outline-secondary mt-2 mr-2" href="{{ .url | absURL }}" target="_blank" rel="noopener noreferrer">{{ .url_text | default "See details" }}</a>
+                <a class="btn btn-sm btn-outline-secondary mt-2 mr-2" href="{{ .url | absURL }}" target="_blank" rel="noopener noreferrer">{{ .url_text | default "See details" }}</a>
                 {{ end }}
                 {{ if .url2 }}
-                   <a class="btn btn-sm btn-outline-secondary mt-2" href="{{ .url2 | absURL }}" target="_blank" rel="noopener noreferrer">{{ .url2_text | default "More Info" }}</a>
+                <a class="btn btn-sm btn-outline-secondary mt-2" href="{{ .url2 | absURL }}" target="_blank" rel="noopener noreferrer">{{ .url2_text | default "More Info" }}</a>
                 {{ end }}
               </div>
             </div>

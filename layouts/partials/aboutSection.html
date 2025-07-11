@@ -15,14 +15,14 @@
                 <div class="about_content">
                     <div class="about_content-thumb">
                         <div class="about-svg">
-                            {{ partial "image.html" (dict "Src" "images/hero/figure-svg.svg" "Context" .) }}
+                            {{ partial "image.html" (dict "Src" "images/hero/figure-svg.svg" "Context" . "Size" "150x150" "Alt" "Decorative Shape") }}
                         </div>
-<div class="about_content-thumb-image">
-    {{ $maskImageResource := resources.Get "images/about/about-mask-svg.svg" }}
-    <div class="mask-image-contain" style='-webkit-mask-image: url({{ $maskImageResource.RelPermalink }}); mask-image: url({{ $maskImageResource.RelPermalink }});'>
-      {{ partial "image.html" (dict "Src" .image "Alt" "about-img" "Context" . )}}
-    </div>
-</div>
+                        <div class="about_content-thumb-image">
+                            {{ $maskImageResource := resources.Get "images/about/about-mask-svg.svg" }}
+                            <div class="mask-image-contain" style="-webkit-mask-image: url('{{ $maskImageResource.RelPermalink }}'); mask-image: url('{{ $maskImageResource.RelPermalink }}');">
+                                {{ partial "image.html" (dict "Src" .image "Alt" "about-img" "Context" . )}}
+                            </div>
+                        </div>
                     </div>
                     <div class="about_content-inner">
                         <div class="about_content-inner-blob">
@@ -32,9 +32,9 @@
                             {{ .content | markdownify}}
                         </div>
                         <div>
-                            <a class="btn btn-primary mr-3 btn-zoom"
-                                href="{{ .button1Target | absURL }}">{{ .button1Name }}</a>
-                            <a class="btn btn-outline-primary btn-zoom" href="{{ .button2Target | absURL }}">
+                            <a class="btn btn-primary me-3 btn-zoom"
+                               href="{{ .button1Target | relURL }}">{{ .button1Name }}</a>
+                            <a class="btn btn-outline-primary btn-zoom" href="{{ .button2Target | relURL }}">
                                 {{ .button2Name }} </a>
                         </div>
                     </div>
